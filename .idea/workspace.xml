@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="">
+      <change afterPath="D:/Coding/JS/eduapp/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="D:/Coding/JS/eduapp/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="D:/Coding/JS/eduapp/src/components/Alert.js" afterDir="false" />
+      <change afterPath="D:/Coding/JS/eduapp/src/context/Types.js" afterDir="false" />
+      <change afterPath="D:/Coding/JS/eduapp/src/context/alert/AlertContext.js" afterDir="false" />
+      <change afterPath="D:/Coding/JS/eduapp/src/context/alert/AlertReducer.js" afterDir="false" />
+      <change afterPath="D:/Coding/JS/eduapp/src/context/alert/AlertState.js" afterDir="false" />
+      <change afterPath="D:/Coding/JS/eduapp/src/styles/spinner.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../site5.ru/www/loadlogs.php" beforeDir="false" afterPath="$PROJECT_DIR$/../site5.ru/www/loadlogs.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../site5.ru/www/logs.log" beforeDir="false" afterPath="$PROJECT_DIR$/../site5.ru/www/logs.log" afterDir="false" />
+      <change beforePath="D:/Coding/JS/eduapp/package.json" beforeDir="false" afterPath="D:/Coding/JS/eduapp/package.json" afterDir="false" />
+      <change beforePath="D:/Coding/JS/eduapp/public/index.html" beforeDir="false" afterPath="D:/Coding/JS/eduapp/public/index.html" afterDir="false" />
+      <change beforePath="D:/Coding/JS/eduapp/src/App.css" beforeDir="false" afterPath="D:/Coding/JS/eduapp/src/App.css" afterDir="false" />
+      <change beforePath="D:/Coding/JS/eduapp/src/App.js" beforeDir="false" afterPath="D:/Coding/JS/eduapp/src/App.js" afterDir="false" />
+      <change beforePath="D:/Coding/JS/eduapp/src/App.test.js" beforeDir="false" />
+      <change beforePath="D:/Coding/JS/eduapp/src/index.css" beforeDir="false" afterPath="D:/Coding/JS/eduapp/src/index.css" afterDir="false" />
+      <change beforePath="D:/Coding/JS/eduapp/src/index.js" beforeDir="false" afterPath="D:/Coding/JS/eduapp/src/index.js" afterDir="false" />
+      <change beforePath="D:/Coding/JS/eduapp/src/logo.svg" beforeDir="false" />
+      <change beforePath="D:/Coding/JS/eduapp/src/reportWebVitals.js" beforeDir="false" />
+      <change beforePath="D:/Coding/JS/eduapp/src/setupTests.js" beforeDir="false" />
+      <change beforePath="D:/Coding/JS/todoapp/src/context/Types.js" beforeDir="false" afterPath="D:/Coding/JS/todoapp/src/context/Types.js" afterDir="false" />
+      <change beforePath="D:/Coding/JS/todoapp/src/context/firebase/FirebaseReducer.js" beforeDir="false" afterPath="D:/Coding/JS/todoapp/src/context/firebase/FirebaseReducer.js" afterDir="false" />
+      <change beforePath="D:/Coding/JS/todoapp/src/context/firebase/FirebaseState.js" beforeDir="false" afterPath="D:/Coding/JS/todoapp/src/context/firebase/FirebaseState.js" afterDir="false" />
+      <change beforePath="D:/Coding/JS/todoapp/src/pages/Home.js" beforeDir="false" afterPath="D:/Coding/JS/todoapp/src/pages/Home.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Less File" />
+        <option value="package.json" />
+        <option value="CSS File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="D:/Coding/JS/eduapp" />
+  </component>
+  <component name="ProjectId" id="1m7Rtu00SM2ZKMzuCFkgNJUFprK" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="database.data.extractors.current.export.id" value="SQL-Insert-Multirow.sql.groovy" />
+    <property name="javascript.nodejs.core.library.configured.version" value="12.19.0" />
+    <property name="javascript.nodejs.core.library.typings.version" value="12.19.0" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\s_aza\OneDrive\Институт\3 курс 1 семестр\Разработка WEB сайтов" />
+      <recent name="D:\Coding\JS\eduapp\src\context\alert" />
+      <recent name="D:\Coding\JS\eduapp\src\styles" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\WebServers\home\edu.ru\www\scripts" />
+      <recent name="C:\WebServers\home\edu.ru\www\styles" />
+      <recent name="C:\WebServers\home\site5.ru\www\scripts" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="D:/Coding/JS/eduapp/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="" />
+      <created>1608842862654</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1608842862654</updated>
+      <workItem from="1608842864090" duration="7341000" />
+      <workItem from="1608892020731" duration="44380000" />
+      <workItem from="1608988579707" duration="25000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

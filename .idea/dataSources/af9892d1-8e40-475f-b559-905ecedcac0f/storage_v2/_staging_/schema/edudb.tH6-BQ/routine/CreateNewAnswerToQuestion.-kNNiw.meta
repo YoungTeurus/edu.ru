@@ -1,0 +1,2 @@
+#n:CreateNewAnswerToQuestion
+#i:(int(11),int(11),varchar(1024),tinyint(1))

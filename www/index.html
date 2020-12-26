@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>EDU</title>
+    <script src="scripts/bootstrap.bundle.min.js"></script>
+    <script src="./scripts/jquery-3.4.1.min.js"></script>
+    <script src="./scripts/index.js"></script>
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/index.css">
+
+    <meta name="theme-color" content="#7952b3">
+</head>
+<body>
+<div id="modalPlace">
+    <div id="userLoginModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Войдите на сайт</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">E
+                    <form>
+                        <div class="mb-3">
+                            <label for="luserLogin" class="form-label">Логин</label>
+                            <input id="luserLogin" type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="luserPassword" class="form-label">Пароль</label>
+                            <input id="luserPassword" type="password" class="form-control" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button id="logIn" type="button" class="btn btn-primary">
+                        <span class="spinner spinner-border spinner-border-sm hidden" role="status"
+                              aria-hidden="true"></span>
+                        Войти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="userRegisterModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Зарегистрируйтесь</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="registerCompleted" class="container hidden">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="Layer_1"style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512"xml:space="preserve"><style type="text/css">.st0 {fill: #41AD49;}</style><g><polygon class="st0" points="434.8,49 174.2,309.7 76.8,212.3 0,289.2 174.1,463.3 196.6,440.9 196.6,440.9 511.7,125.8 434.8,49     "/></g></svg>
+                            </div>
+                        </div>
+                        <div class="row align-items-center justify-content-center">
+                                Успешная регистрация! Производится вход на сайт...
+                        </div>
+                    </div>
+                    <form id="registerForm">
+                        <p class="form-text">Зарегистрировавшись, вы сможете присоединиться к вашей студенческой
+                            группе.</p>
+                        <div class="mb-3">
+                            <label for="ruserLogin" class="form-label">Логин</label>
+                            <input id="ruserLogin" type="text" class="form-control" required
+                                   aria-describedby="ruserLoginValidation">
+                            <div id="ruserLoginValidation" class="invalid-feedback">
+                                Заполните это поле!
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ruserEmail" class="form-label">Email</label>
+                            <input id="ruserEmail" type="email" class="form-control" required
+                                   aria-describedby="emailHelp">
+                            <div id="emailHelp" class="form-text">Указанный email будет использоваться для обратной
+                                связи с Вами.
+                            </div>
+                            <div id="ruserEmailValidation" class="invalid-feedback">
+                                Заполните это поле!
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ruserPassword" class="form-label">Пароль</label>
+                            <input id="ruserPassword" type="password" class="form-control" required>
+                            <div id="ruserPasswordValidation" class="invalid-feedback">
+                                Заполните это поле!
+                            </div>
+                            <div id="passwordHelp" class="form-text">
+                                Критерии сильного пароля:
+                                <ul>
+                                    <li>Длина от 8 символов</li>
+                                    <li>Наличие больших и малых букв</li>
+                                    <li>Наличие спецсимволов</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ruserPasswordAgain" class="form-label">Повторите пароль</label>
+                            <input id="ruserPasswordAgain" type="password" class="form-control"
+                                   aria-describedby="ruserPasswordAgainValidation" required>
+                            <div id="ruserPasswordAgainValidation" class="invalid-feedback">
+                                Пароли должны совпадать!
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="row">
+                                <button type="button" class="btn btn-secondary col" data-bs-dismiss="modal">Отмена
+                                </button>
+                                <button id="register" type="button" class="btn btn-primary col">
+                                    <span class="spinner spinner-border spinner-border-sm hidden" role="status"
+                                          aria-hidden="true"></span>
+                                    Зарегистрироваться
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a href="#" class="navbar-brand col-md-3 col-lg-2 me-0 px-3">EDU</a>
+    <button class="navbar-toggler d-md-none collapsed " type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Развернуть/свернуть меню">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <ul class="navbar-nav px-3 flex-row">
+        <li id="navButtonPlaceholder" class="nav-item text-nowrap m-1">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </li>
+        <li id="loginButtonListItem" class="nav-item text-nowrap m-1 hidden">
+            <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#userLoginModal">Войти</button>
+        </li>
+        <li id="registerButtonListItem" class="nav-item text-nowrap m-1 hidden">
+            <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#userRegisterModal">
+                Зарегистрироваться
+            </button>
+        </li>
+        <li id="logoutButtonListItem" class="nav-item text-nowrap m-1 hidden">
+            <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#userLoginModal">Выйти</button>
+        </li>
+    </ul>
+</header>
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a href="#" class="nav-link active">Главная</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Ссылка 2</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Ссылка 3</a></li>
+                </ul>
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Подкатегория</span>
+                    <a href="#" class="link-secondary" aria-label="Добавить что-то">+</a>
+                </h6>
+                <ul class="nav flex-column md-2">
+                    <li class="nav-item"><a href="#" class="nav-link">Ссылка 4</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Ссылка 5</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Ссылка 6</a></li>
+                </ul>
+            </div>
+        </nav>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div>
+                <form>
+                    <button id="getAvailableTests">Получить доступные тесты</button>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>
