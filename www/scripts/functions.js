@@ -472,38 +472,3 @@ function generateTriesTable(testId) {
         )
         .append(tbody)
 }
-
-// Все действия, проиходящие после получения информации о статусе входа пользователя:
-function doAfterCheckingLoginStatus(logined) {
-    isUserLogined = logined["logined"];
-
-    // В любом случае:
-    $("#navButtonPlaceholder")[0].classList.add('hidden');
-
-    if (isUserLogined) {
-        // Если пользователь авторизован на момент входа на сайт:
-
-        // Проказываем кнопку выхода из аккаунта:
-        $("#logoutButtonListItem")[0].classList.remove('hidden');
-        // Получаем список тестов, доступных для прохождения пользователю:
-        getAvailableTests().then(
-            msg => {
-                console.log(msg);
-                clearAvailableTests();
-                msg["availableTests"].forEach(
-                    test => {
-                        appendNewAvailableTest(test);
-                    }
-                );
-            }
-        ).catch(
-            e => console.log(e)
-        );
-    } else {
-        // Если пользователь не авторизован на момент входа на сайт:
-
-        // Показываем кнопки входа в аккаунт и регистрации нового аккаунта:
-        $("#loginButtonListItem")[0].classList.remove('hidden');
-        $("#registerButtonListItem")[0].classList.remove('hidden');
-    }
-}

@@ -3,6 +3,8 @@ const testId = urlParams.get('testId');
 
 function doAfterCheckingLoginStatus(logined) {
     isUserLogined = logined["logined"];
+
+
 }
 
 function getQuestion(questionId){
@@ -11,14 +13,14 @@ function getQuestion(questionId){
 
 $(() => {
     if (testId === null){
-        console.log('wtf?');
+        $("#errorMissingTestId")[0].classList.remove('hidden');
+    } else {
+        checkUserLoginStatus()
+            .catch(e => console.log(e))
+            .then(
+                logined => {
+                    doAfterCheckingLoginStatus(logined);
+                }
+            );
     }
-
-    // checkUserLoginStatus()
-    //     .catch(e => console.log(e))
-    //     .then(
-    //         logined => {
-    //             doAfterCheckingLoginStatus(logined);
-    //         }
-    //     );
 });
