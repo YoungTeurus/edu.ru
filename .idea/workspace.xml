@@ -5,30 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="">
-      <change afterPath="D:/Coding/JS/eduapp/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="D:/Coding/JS/eduapp/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="D:/Coding/JS/eduapp/src/components/Alert.js" afterDir="false" />
-      <change afterPath="D:/Coding/JS/eduapp/src/context/Types.js" afterDir="false" />
-      <change afterPath="D:/Coding/JS/eduapp/src/context/alert/AlertContext.js" afterDir="false" />
-      <change afterPath="D:/Coding/JS/eduapp/src/context/alert/AlertReducer.js" afterDir="false" />
-      <change afterPath="D:/Coding/JS/eduapp/src/context/alert/AlertState.js" afterDir="false" />
-      <change afterPath="D:/Coding/JS/eduapp/src/styles/spinner.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../site5.ru/www/loadlogs.php" beforeDir="false" afterPath="$PROJECT_DIR$/../site5.ru/www/loadlogs.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../site5.ru/www/logs.log" beforeDir="false" afterPath="$PROJECT_DIR$/../site5.ru/www/logs.log" afterDir="false" />
-      <change beforePath="D:/Coding/JS/eduapp/package.json" beforeDir="false" afterPath="D:/Coding/JS/eduapp/package.json" afterDir="false" />
-      <change beforePath="D:/Coding/JS/eduapp/public/index.html" beforeDir="false" afterPath="D:/Coding/JS/eduapp/public/index.html" afterDir="false" />
-      <change beforePath="D:/Coding/JS/eduapp/src/App.css" beforeDir="false" afterPath="D:/Coding/JS/eduapp/src/App.css" afterDir="false" />
-      <change beforePath="D:/Coding/JS/eduapp/src/App.js" beforeDir="false" afterPath="D:/Coding/JS/eduapp/src/App.js" afterDir="false" />
-      <change beforePath="D:/Coding/JS/eduapp/src/App.test.js" beforeDir="false" />
-      <change beforePath="D:/Coding/JS/eduapp/src/index.css" beforeDir="false" afterPath="D:/Coding/JS/eduapp/src/index.css" afterDir="false" />
-      <change beforePath="D:/Coding/JS/eduapp/src/index.js" beforeDir="false" afterPath="D:/Coding/JS/eduapp/src/index.js" afterDir="false" />
-      <change beforePath="D:/Coding/JS/eduapp/src/logo.svg" beforeDir="false" />
-      <change beforePath="D:/Coding/JS/eduapp/src/reportWebVitals.js" beforeDir="false" />
-      <change beforePath="D:/Coding/JS/eduapp/src/setupTests.js" beforeDir="false" />
-      <change beforePath="D:/Coding/JS/todoapp/src/context/Types.js" beforeDir="false" afterPath="D:/Coding/JS/todoapp/src/context/Types.js" afterDir="false" />
-      <change beforePath="D:/Coding/JS/todoapp/src/context/firebase/FirebaseReducer.js" beforeDir="false" afterPath="D:/Coding/JS/todoapp/src/context/firebase/FirebaseReducer.js" afterDir="false" />
-      <change beforePath="D:/Coding/JS/todoapp/src/context/firebase/FirebaseState.js" beforeDir="false" afterPath="D:/Coding/JS/todoapp/src/context/firebase/FirebaseState.js" afterDir="false" />
-      <change beforePath="D:/Coding/JS/todoapp/src/pages/Home.js" beforeDir="false" afterPath="D:/Coding/JS/todoapp/src/pages/Home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/functions/testsFunctions.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/functions/testsFunctions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/www/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/scripts/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/styles/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/www/styles/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/styles/index.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/www/styles/index.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/styles/index.less" beforeDir="false" afterPath="$PROJECT_DIR$/www/styles/index.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/tests.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/tests.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +33,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="D:/Coding/JS/eduapp" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1m7Rtu00SM2ZKMzuCFkgNJUFprK" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -83,18 +67,6 @@
       <recent name="C:\WebServers\home\site5.ru\www\scripts" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
-      <package-json value="D:/Coding/JS/eduapp/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="start" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -105,7 +77,7 @@
       <updated>1608842862654</updated>
       <workItem from="1608842864090" duration="7341000" />
       <workItem from="1608892020731" duration="44380000" />
-      <workItem from="1608988579707" duration="25000" />
+      <workItem from="1608988579707" duration="19795000" />
     </task>
     <servers />
   </component>

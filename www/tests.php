@@ -37,6 +37,26 @@ if (isset($_POST["form"])){
             $message["success"] = true;
             break;
         }
+        case "getTestTries":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if (isset($_POST["form"]["testId"])){
+                    // Если необходимое значение передано
+                    $message["testTries"] = GetTestTries($db, $userStatus->userId, $_POST["form"]["testId"]);
+                } else {
+                    // Если необходимое значение не передано.
+                    $message["error"] = true;
+                    $message["errorText"] = "Не было передано одно из следующих значений: testId.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+            break;
+        }
     }
 }
 

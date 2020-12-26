@@ -4,4 +4,7 @@
 .hidden {
   display: none;
 }
+.testRow {
+  cursor: pointer;
+}
 /*# sourceMappingURL=index.css.map */
