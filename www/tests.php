@@ -55,6 +55,38 @@ if (isset($_POST["form"])){
             }
             $message["success"] = true;
             break;
+        }
+        case "getTestQuestions":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if (isset($_POST["form"]["testId"])){
+                    // Если необходимое значение передано
+                    // Проверяем, доступен ли этот тест пользователю:
+                    if (IsTestAvailableForUser($db, $_POST["form"]["testId"], $userStatus->userId)){
+                        if (IsTestStartedByUser($db, $_POST["form"]["testId"], $userStatus->userId)){
+                            $message["questions"] = GetTestQuestions($db, $_POST["form"]["testId"]);
+                            $message["answers"] = GetTestAnswers($db, $_POST["form"]["testId"]);
+                        } else {
+                            // Если пользователь запросил тест, который он не начал
+                            $message["error"] = true;
+                            $message["errorText"] = "Запрошен тест, который не был начат.";
+                        }
+                    } else {
+                        // Если пользователь запросил тест, к которому не имеет доступа
+                        $message["error"] = true;
+                        $message["errorText"] = "Запрошен тест, доступ к которому запрещён.";
+                    }
+                } else {
+                    // Если необходимое значение не передано.
+                    $message["error"] = true;
+                    $message["errorText"] = "Не было передано одно из следующих значений: testId.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
             break;
         }
     }
