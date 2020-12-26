@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Отображение ошибке по переходе по недействительной ссылке.">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f/storage_v2/_src_/schema/edudb.tH6-BQ.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f/storage_v2/_src_/schema/edudb.tH6-BQ.zip" afterDir="false" />
+    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Визуальное оформление вопросов теста.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/functions/testsFunctions.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/functions/testsFunctions.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/scripts/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/test.html" beforeDir="false" afterPath="$PROJECT_DIR$/www/test.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/tests.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/tests.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +74,7 @@
       <updated>1608842862654</updated>
       <workItem from="1608842864090" duration="7341000" />
       <workItem from="1608892020731" duration="44380000" />
-      <workItem from="1608988579707" duration="26605000" />
+      <workItem from="1608988579707" duration="28744000" />
     </task>
     <task id="LOCAL-00001" summary="Таблица тестов и информации о тестов автоматически подгружаются после логина.">
       <created>1609013504322</created>
@@ -101,7 +97,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609015839298</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Визуальное оформление вопросов теста.">
+      <created>1609020359066</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1609020359066</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -123,7 +126,8 @@
     <MESSAGE value="Таблица тестов и информации о тестов автоматически подгружаются после логина." />
     <MESSAGE value="Вынесение функций из index.js в functions.js. Начало работы с test.html" />
     <MESSAGE value="Отображение ошибке по переходе по недействительной ссылке." />
-    <option name="LAST_COMMIT_MESSAGE" value="Отображение ошибке по переходе по недействительной ссылке." />
+    <MESSAGE value="Визуальное оформление вопросов теста." />
+    <option name="LAST_COMMIT_MESSAGE" value="Визуальное оформление вопросов теста." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
