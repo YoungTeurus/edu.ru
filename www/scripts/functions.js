@@ -2,6 +2,7 @@ const siteURL = "http://edu.ru";
 
 // Является ли пользователь авторизованым?
 let isUserLogined = false;
+let userInfo = {};
 
 const testsStatuses = {
     completed: {text: "☑ Выполнен"},
@@ -275,115 +276,6 @@ function getScoreText(score) {
     }
 }
 
-// Возвращает объект jQuery, который содержит информацию о всех попытках прохождения тестов.
-// Информация дополняется async-ом.
-function generateTriesTable(testId) {
-    let tbody = $("<tbody>");
-
-    // Получаем попытки прохождения и заполняем таблицу с помощью async
-    asyncGetTriesTable(testId).then(
-        testTries => {
-            if (testTries.length > 0) {
-                // Если была найдена хотя бы одна попытка...
-                testTries.forEach(
-                    testTry => {
-                        // Для каждой попытки добавляем строку с соответствующими данными:
-                        tbody.append(
-                            $("<tr>")
-                                .append(
-                                    // Номер теста
-                                    $("<th scope=\"row\">").text(testTry["try"])
-                                )
-                                .append(
-                                    // Дата начала прохождения
-                                    $("<td>").text(testTry["startedDatetime"])
-                                )
-                                .append(
-                                    // Оценка тесирования
-                                    $("<td>").text(
-                                        (testTry["finished"] === "1" ?
-                                                // Если тест был пройден:
-                                                getScoreText(testTry["score"])
-                                                :
-                                                // Если тест ещё в прогрессе:
-                                                "-"
-                                        ))
-                                )
-                                .append(
-                                    // Статус тестирования
-                                    $("<td>").text(
-                                        (testTry["finished"] === "1" ?
-                                                // Если тест был пройден:
-                                                triesStasuses.completed.text
-                                                :
-                                                // Если тест ещё в прогрессе:
-                                                triesStasuses.inProgress.text
-                                        ))
-                                )
-                                .append(
-                                    // Кнопка "Просмотреть"/"Продолжить"
-                                    $("<td>").append(
-                                        (testTry["finished"] === "1" ?
-                                                // Если тест был пройден:
-                                                $("<button class=\"btn btn-outline-secondary\">").data("try", testTry["try"]).text("Просмотреть")
-                                                :
-                                                // Если тест ещё в прогрессе:
-                                                $("<button class=\"btn btn-primary\">").data("try", testTry["try"]).text("Продолжить")
-                                                    .on('click', () => {
-                                                        const testUrl = siteURL + "/test.html?testId="+testId;
-                                                        openUrlInNewTab(testUrl);
-                                                        // TODO: переделать так, чтобы вставлять сюда не весь код Modal-а
-                                                        showModal(
-                                                            "<h5 class=\"modal-title\">Продолжить тест</h5>\n" +
-                                                            "                    <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Закрыть\"></button>",
-                                                            "<div class=\"container text-center\">\n" +
-                                                            "                        <div class=\"row col-6 m-auto\">\n" +
-                                                            "                            <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewBox=\"0 -2 24 24\">\n" +
-                                                            "                                <g id=\"Lager_17\" data-name=\"Lager 17\" transform=\"translate(-4 -6)\">\n" +
-                                                            "                                    <path id=\"Path_19\" data-name=\"Path 19\" d=\"M22.091,16.681a1.97,1.97,0,0,0,.278-.732,1,1,0,0,0-.278-.679L16.574,9.538a2.116,2.116,0,0,1-.01-2.887l.028-.03a1.958,1.958,0,0,1,2.854-.008l8.267,8.613a1.077,1.077,0,0,1,.287.723,2.115,2.115,0,0,1-.287.775l-8.267,8.665a1.959,1.959,0,0,1-2.854-.012l-.028-.036a2.134,2.134,0,0,1,.01-2.9Z\" fill=\"#040505\"/>\n" +
-                                                            "                                    <path id=\"Path_20\" data-name=\"Path 20\" d=\"M10.091,16.681a1.97,1.97,0,0,0,.278-.732,1,1,0,0,0-.278-.679L4.574,9.538a2.116,2.116,0,0,1-.01-2.887l.028-.03a1.958,1.958,0,0,1,2.854-.008l8.267,8.613a1.077,1.077,0,0,1,.287.723,2.115,2.115,0,0,1-.287.775L7.446,25.389a1.959,1.959,0,0,1-2.854-.012l-.028-.036a2.134,2.134,0,0,1,.01-2.9Z\" fill=\"#040505\"/>\n" +
-                                                            "                                </g>\n" +
-                                                            "                            </svg>\n" +
-                                                            "                        </div>\n" +
-                                                            "                        <div class=\"row\">\n" +
-                                                            "                            <p>Страница для продолжения теста открыта.</p>\n" +
-                                                            "                            <p>Если вы не были перенаправлены на страницу с тестом, нажмите <a class=\"link-primary\" href=\"" + testUrl +"\">сюда</a>.</p>\n" +
-                                                            "                        </div>\n" +
-                                                            "                    </div>",
-                                                            ""
-                                                        );
-                                                    })
-                                        )
-                                    )
-                                )
-                        )
-                        ;
-                    });
-            } else {
-                // Если попыток не было найдено...
-                tbody.append(
-                    $("<tr>")
-                        .append(
-                            $("<td colspan='5' class='text-center'>").text("Вы ещё не проходили данный тест.")
-                        )
-                );
-            }
-        }
-    ).catch(e => console.log(e));
-
-    return $("<table id=\"testTries\" class=\"table\">")
-        .append(
-            $("<thead>").html('<tr>' +
-                '<th scope="col">Номер попытки</th>' +
-                '<th scope="col">Дата начала</th>' +
-                '<th scope="col">Оценка</th>' +
-                '<th scope="col">Статус</th>' +
-                '<th scope="col">Действие</th>' +
-                '</tr>')
-        )
-        .append(tbody)
-}
-
 function showModal(headerHTML, bodyHTML, footerHTML){
     const modal = $("#defaultModal");
 
@@ -419,4 +311,9 @@ function showErrorModal(errorText){
         "                    </div>",
         ""
     );
+}
+
+// Открывает указанный сайт в новой вкладке
+function openUrlInNewTab(url) {
+    window.open(url, "_blank");
 }

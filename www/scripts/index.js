@@ -1,6 +1,5 @@
-let userInfo = {};
-
 // Очищает таблицу доступных тестов
+// TODO: вынести функционал в отдельную функцию с параметром?
 function clearAvailableTests() {
     $("#availableTests tbody tr").remove();
 }
@@ -53,29 +52,24 @@ function appendNewAvailableTest(testRowObject) {
     testRowObject._status = _status;
 
     $("#availableTests tbody").append(
-        $("<tr class='testRow'>")
+        $("<tr>")
             .append(
                 $("<th scope='row'>").text(testRowObject["name"])
             )
             .append(
-                $("<th>").text(testRowObject._status.text)
+                $("<td>").text(testRowObject._status.text)
             )
             .append(
-                $("<th>").text(testRowObject["openDatetime"] !== null ? testRowObject["openDatetime"] : "-")
+                $("<td>").text(testRowObject["openDatetime"] !== null ? testRowObject["openDatetime"] : "-")
             )
             .append(
-                $("<th>").text(testRowObject["closeDatetime"] !== null ? testRowObject["closeDatetime"] : "-")
+                $("<td>").text(testRowObject["closeDatetime"] !== null ? testRowObject["closeDatetime"] : "-")
             )
             .on('click', () => {
                 console.log(testRowObject["testId"]);
                 showTestInfo(testRowObject);
             })
     );
-}
-
-// Открывает указанный сайт в новой вкладке
-function openUrlInNewTab(url){
-    window.open(url, "_blank");
 }
 
 // Получает информацию о тесте и загружает информацию о нём на страничку.
@@ -154,11 +148,11 @@ function showTestInfo(testRowObject) {
                                                 console.log(msg);
                                                 // Скрываем спиннер:
                                                 spinner[0].classList.add('hidden');
-                                                if (msg["success"]){
-                                                    if (!msg["error"]){
-                                                        if (msg["hasStarted"]){
+                                                if (msg["success"]) {
+                                                    if (!msg["error"]) {
+                                                        if (msg["hasStarted"]) {
                                                             // Если начали тест:
-                                                            const testUrl = siteURL + "/test.html?testId="+testRowObject["testId"];
+                                                            const testUrl = siteURL + "/test.html?testId=" + testRowObject["testId"];
                                                             openUrlInNewTab(testUrl);
                                                             // TODO: переделать так, чтобы вставлять сюда не весь код Modal-а
                                                             showModal(
@@ -175,7 +169,7 @@ function showTestInfo(testRowObject) {
                                                                 "                        </div>\n" +
                                                                 "                        <div class=\"row\">\n" +
                                                                 "                            <p>Тест был успешно начат.</p>\n" +
-                                                                "                            <p>Если вы не были перенаправлены на страницу с тестом, нажмите <a class=\"link-primary\" href=\"" + testUrl +"\">сюда</a>.</p>\n" +
+                                                                "                            <p>Если вы не были перенаправлены на страницу с тестом, нажмите <a class=\"link-primary\" href=\"" + testUrl + "\">сюда</a>.</p>\n" +
                                                                 "                        </div>\n" +
                                                                 "                    </div>",
                                                                 ""
@@ -189,12 +183,136 @@ function showTestInfo(testRowObject) {
                                 })
                             :
                             // Если тест невозможно начать:
-                            $("<button class=\"btn btn-outline-secondary\">").text("Недоступно") )
+                            $("<button class=\"btn btn-outline-secondary\">").text("Недоступно"))
                     )
             )
     );
 }
 
+// Возвращает объект jQuery, который содержит информацию о всех попытках прохождения тестов.
+// Информация дополняется async-ом.
+function generateTriesTable(testId) {
+    let tbody = $("<tbody>");
+
+    // Получаем попытки прохождения и заполняем таблицу с помощью async
+    asyncGetTriesTable(testId).then(
+        testTries => {
+            if (testTries.length > 0) {
+                // Если была найдена хотя бы одна попытка...
+                testTries.forEach(
+                    testTry => {
+                        // Для каждой попытки добавляем строку с соответствующими данными:
+                        tbody.append(
+                            $("<tr>")
+                                .append(
+                                    // Номер теста
+                                    $("<th scope=\"row\">").text(testTry["try"])
+                                )
+                                .append(
+                                    // Дата начала прохождения
+                                    $("<td>").text(testTry["startedDatetime"])
+                                )
+                                .append(
+                                    // Оценка тесирования
+                                    $("<td>").text(
+                                        (testTry["finished"] === "1" ?
+                                                // Если тест был пройден:
+                                                getScoreText(testTry["score"])
+                                                :
+                                                // Если тест ещё в прогрессе:
+                                                "-"
+                                        ))
+                                )
+                                .append(
+                                    // Статус тестирования
+                                    $("<td>").text(
+                                        (testTry["finished"] === "1" ?
+                                                // Если тест был пройден:
+                                                triesStasuses.completed.text
+                                                :
+                                                // Если тест ещё в прогрессе:
+                                                triesStasuses.inProgress.text
+                                        ))
+                                )
+                                .append(
+                                    // Кнопка "Просмотреть"/"Продолжить"
+                                    $("<td>").append(
+                                        (testTry["finished"] === "1" ?
+                                                // Если тест был пройден:
+                                                $("<button class=\"btn btn-outline-secondary\">").data("try", testTry["try"]).text("Просмотреть")
+                                                :
+                                                // Если тест ещё в прогрессе:
+                                                $("<button class=\"btn btn-primary\">").data("try", testTry["try"]).text("Продолжить")
+                                                    .on('click', () => {
+                                                        const testUrl = siteURL + "/test.html?testId=" + testId;
+                                                        openUrlInNewTab(testUrl);
+                                                        // TODO: переделать так, чтобы вставлять сюда не весь код Modal-а
+                                                        showModal(
+                                                            "<h5 class=\"modal-title\">Продолжить тест</h5>\n" +
+                                                            "                    <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Закрыть\"></button>",
+                                                            "<div class=\"container text-center\">\n" +
+                                                            "                        <div class=\"row col-6 m-auto\">\n" +
+                                                            "                            <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewBox=\"0 -2 24 24\">\n" +
+                                                            "                                <g id=\"Lager_17\" data-name=\"Lager 17\" transform=\"translate(-4 -6)\">\n" +
+                                                            "                                    <path id=\"Path_19\" data-name=\"Path 19\" d=\"M22.091,16.681a1.97,1.97,0,0,0,.278-.732,1,1,0,0,0-.278-.679L16.574,9.538a2.116,2.116,0,0,1-.01-2.887l.028-.03a1.958,1.958,0,0,1,2.854-.008l8.267,8.613a1.077,1.077,0,0,1,.287.723,2.115,2.115,0,0,1-.287.775l-8.267,8.665a1.959,1.959,0,0,1-2.854-.012l-.028-.036a2.134,2.134,0,0,1,.01-2.9Z\" fill=\"#040505\"/>\n" +
+                                                            "                                    <path id=\"Path_20\" data-name=\"Path 20\" d=\"M10.091,16.681a1.97,1.97,0,0,0,.278-.732,1,1,0,0,0-.278-.679L4.574,9.538a2.116,2.116,0,0,1-.01-2.887l.028-.03a1.958,1.958,0,0,1,2.854-.008l8.267,8.613a1.077,1.077,0,0,1,.287.723,2.115,2.115,0,0,1-.287.775L7.446,25.389a1.959,1.959,0,0,1-2.854-.012l-.028-.036a2.134,2.134,0,0,1,.01-2.9Z\" fill=\"#040505\"/>\n" +
+                                                            "                                </g>\n" +
+                                                            "                            </svg>\n" +
+                                                            "                        </div>\n" +
+                                                            "                        <div class=\"row\">\n" +
+                                                            "                            <p>Страница для продолжения теста открыта.</p>\n" +
+                                                            "                            <p>Если вы не были перенаправлены на страницу с тестом, нажмите <a class=\"link-primary\" href=\"" + testUrl + "\">сюда</a>.</p>\n" +
+                                                            "                        </div>\n" +
+                                                            "                    </div>",
+                                                            ""
+                                                        );
+                                                    })
+                                        )
+                                    )
+                                )
+                        )
+                        ;
+                    });
+            } else {
+                // Если попыток не было найдено...
+                tbody.append(
+                    $("<tr>")
+                        .append(
+                            $("<td colspan='5' class='text-center'>").text("Вы ещё не проходили данный тест.")
+                        )
+                );
+            }
+        }
+    ).catch(e => console.log(e));
+
+    return $("<table id=\"testTries\" class=\"table\">")
+        .append(
+            $("<thead>").html('<tr>' +
+                '<th scope="col">Номер попытки</th>' +
+                '<th scope="col">Дата начала</th>' +
+                '<th scope="col">Оценка</th>' +
+                '<th scope="col">Статус</th>' +
+                '<th scope="col">Действие</th>' +
+                '</tr>')
+        )
+        .append(tbody)
+}
+
+// Производит действия после получения UserInfo
+function reactOnUserInfo() {
+    if (userInfo["ableToEditTests"] === "1") {
+        // Если пользователь может редактировать тесты
+        // Показываем соответствующую кнопку:
+        $("#editTests").parent().removeClass('hidden');
+    }
+    if (userInfo["ableToCheckTests"] === "1") {
+        // Елси пользователь может проверять тесты
+        // Показываем соответствующую кнопку:
+        $("#checkTests").parent().removeClass('hidden');
+    }
+
+    // TODO: Выводить имя пользователя куда-нибудь
+}
 
 // Все действия, проиходящие после получения информации о статусе входа пользователя:
 function doAfterCheckingLoginStatus(logined) {
@@ -206,8 +324,18 @@ function doAfterCheckingLoginStatus(logined) {
     if (isUserLogined) {
         // Если пользователь авторизован на момент входа на сайт:
 
-        // Проказываем кнопку выхода из аккаунта:
+        // Показываем кнопку выхода из аккаунта:
         $("#logoutButtonListItem")[0].classList.remove('hidden');
+        // Получаем инфомрацию о пользователе:
+        getUserInfo().then(
+            msg => {
+                console.log(msg);
+                if (msg["success"]) {
+                    userInfo = msg["userinfo"];
+                    reactOnUserInfo();
+                }
+            }
+        ).catch(e => console.log(e));
         // Получаем список тестов, доступных для прохождения пользователю:
         getAvailableTests().then(
             msg => {
@@ -229,6 +357,88 @@ function doAfterCheckingLoginStatus(logined) {
         $("#loginButtonListItem")[0].classList.remove('hidden');
         $("#registerButtonListItem")[0].classList.remove('hidden');
     }
+}
+
+// Возваращает информацию о всех тестах
+function getAllTests() {
+    let data = {form: {}};
+    data["form"]["action"] = "getAllTests";
+    console.log(data);
+    return postAjax(
+        siteURL + '/tests.php',
+        data,
+        new ConnectException("Произошла ошибка при отправке запроса на получение информации о тестах!")
+    );
+}
+
+// Очищает содержимое таблицы editTestsTable
+// TODO: вынести функционал в отдельную функцию с параметром?
+function clearEditTestsTable() {
+    $("#editTestsTable tbody tr").remove();
+}
+
+// Добавляет тест в таблицу тестов для редактирования
+function appendTestToEditTestsTable(editTestRowObject) {
+    $("#editTestsTable tbody").append(
+        $("<tr>")
+            .append(
+                $("<th scope='row'>").text(editTestRowObject["name"])
+            )
+            .append(
+                $("<td>").text(editTestRowObject["creationDatetime"])
+            )
+            .append(
+                $("<td>").text(editTestRowObject["openDatetime"])
+            )
+            .append(
+                $("<td>").text(editTestRowObject["closeDatetime"])
+            )
+            .append(
+                $("<td>")
+                    .append(
+                        $("<button class=\"btn btn-primary\">")
+                            .on('click', () => {
+                                console.log('Edit groups of testId: ', editTestRowObject["id"]);
+                                // TODO: Код для кнопки редактирования групп
+                            })
+                            .text("Редактировать")
+                    )
+            )
+            .append(
+                $("<td>")
+                    .append(
+                        $("<button class=\"btn btn-primary\">")
+                            .on('click', () => {
+                                console.log('Edit questions testId: ', editTestRowObject["id"]);
+                                // TODO: Код для кнопки редактирования вопросов
+                            })
+                            .text("Редактировать")
+                    )
+            )
+            .append(
+                $("<td>").append("<div class=\"container text-center\">").append(
+                    $("<div class=\"row mb-1\">").append(
+                        $("<div>")
+                            .append(
+                                $("<button class=\"btn btn-primary\">")
+                                    .on('click', () => {
+                                        console.log('Edit whole testId: ', editTestRowObject["id"]);
+                                        // TODO: Код для кнопки редактирования вопросов
+                                    })
+                                    .text("Редактировать")
+                            )
+                            .append(
+                                $("<button class=\"btn btn-danger\">")
+                                    .on('click', () => {
+                                        console.log('Delete testId: ', editTestRowObject["id"]);
+                                        // TODO: Код для кнопки редактирования вопросов
+                                    })
+                                    .text("Удалить")
+                            )
+                    )
+                )
+            )
+    );
 }
 
 $(() => {
@@ -331,6 +541,25 @@ $(() => {
             .catch(
                 e => console.log(e)
             );
+    });
+    $('#editTests').on('click', e => {
+        e.preventDefault();
+        getAllTests().then(
+            msg => {
+                console.log(msg);
+                if(msg["success"]){
+                    if(!msg["error"]){
+                        clearEditTestsTable();
+                        msg["tests"].forEach(
+                            test => appendTestToEditTestsTable(test)
+                        );
+                    }
+                }
+            }
+        ).catch(e => console.log(e));
+    });
+    $('#checkTests').on('click', e => {
+        e.preventDefault();
     });
 
     checkUserLoginStatus()

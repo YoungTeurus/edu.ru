@@ -37,6 +37,25 @@ if (isset($_POST["form"])){
             $message["success"] = true;
             break;
         }
+        case "getAllTests":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if (IfUserCanEditTests($db, $userStatus->userId)){
+                    // Если у пользователя достаточно полномочий:
+                    $message["tests"] = GetAllTests($db);
+                } else {
+                    // Если у пользователя недостаточно полномочий:
+                    $message["error"] = true;
+                    $message["errorText"] = "Пользователь не имеет прав на получение списка всех тестов.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
         case "getTestTries":{
             if ($userStatus->logined) {
                 // Если пользователь авторизован:

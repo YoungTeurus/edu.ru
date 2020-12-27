@@ -205,6 +205,8 @@ function AddAnswer($db, $userId, $testId, $questionId, $answer){
     return false;
 }
 
+// Заканчивает тест testId, который проходит userId.
+// Вызывается соответсвующая процедура, попытка заканчивается, происходит попытка авто-проверки.
 function EndTest($db, $userId, $testId){
     $endTest = $db->prepare("CALL EndCurrentTestTry(:userId, :testId);");
     $endTest->bindParam(':userId', $_userId);
@@ -218,6 +220,40 @@ function EndTest($db, $userId, $testId){
     }
 
     return false;
+}
+
+// Возвращает true, если пользователь обладает возможностью редактировать тесты
+function IfUserCanEditTests($db, $userId){
+    $returnVar = false;
+    // Возвращает 1 или 0. 1 - пользователь обладает нужными правами, 0 - ... не обладает
+    $ifUserCanEditTests = $db->prepare("SELECT ableToEditTests FROM usersgroups JOIN users u on usersgroups.id = u.groupId and u.id = :userId;");
+    $ifUserCanEditTests->bindParam(':userId', $_userId);
+
+    $_userId = $userId;
+
+    if ($ifUserCanEditTests->execute()) {
+        if ($ifUserCanEditTests->rowCount() > 0) {
+            $row = $ifUserCanEditTests->fetch(PDO::FETCH_ASSOC);
+            $returnVar = $row["ableToEditTests"] == "1";
+        }
+    }
+
+    return $returnVar;
+}
+
+// Возвращает массив, содержащий все тестыЫ
+function GetAllTests($db){
+    $returnArray = array();
+    // Возвращает id пользователя, ник пользователя и дату окончания "сессии" для пользователя с заданным хешем входа и IP-адресом:
+    $getAllTests = $db->prepare("SELECT id, name, creationDatetime, openDatetime, closeDatetime, maxTries, timeToComplete FROM tests;");
+
+    if ($getAllTests->execute()) {
+        if ($getAllTests->rowCount() > 0) {
+            $returnArray = $getAllTests->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
+
+    return $returnArray;
 }
 
 ?>

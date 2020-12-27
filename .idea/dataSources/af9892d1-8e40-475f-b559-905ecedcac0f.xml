@@ -1337,7 +1337,7 @@ try</RefColNames>
       <DataType>tinyint(1)|0s</DataType>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <column id="333" parent="220" name="ableToCreateTests">
+    <column id="333" parent="220" name="ableToEditTests">
       <Position>4</Position>
       <Comment>Могут ли пользователи создавать тесты</Comment>
       <DataType>tinyint(1)|0s</DataType>
