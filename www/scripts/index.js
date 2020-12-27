@@ -335,5 +335,5 @@ $(() => {
             }
         );
 
-    $("#devModal").modal('show');
+    // $("#devModal").modal('show');
 });

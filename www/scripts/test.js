@@ -42,8 +42,19 @@ function doAfterCheckingLoginStatus(logined) {
                                     console.log(msg);
                                     if(msg["added"]){
                                         // Если всё успешно...
-                                        // TODO: выводить окошко с уведомлением об успехе.
-                                        showModal();
+                                        showModal(
+                                            "<h5 class=\"modal-title\">Тест завершён</h5>",
+                                            "<div class=\"container text-center\">\n" +
+                                            "                        <div class=\"row col-6 m-auto\">\n" +
+                                            "                            <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"Layer_1\"style=\"enable-background:new 0 0 512 512;\" version=\"1.1\" viewBox=\"0 0 512 512\"xml:space=\"preserve\"><style type=\"text/css\">.st0 {fill: #41AD49;}</style><g><polygon class=\"st0\" points=\"434.8,49 174.2,309.7 76.8,212.3 0,289.2 174.1,463.3 196.6,440.9 196.6,440.9 511.7,125.8 434.8,49     \"/></g></svg>\n" +
+                                            "                        </div>\n" +
+                                            "                        <div class=\"row\">\n" +
+                                            "                            <p>Тест был успешно завершён!</p>\n" +
+                                            "                            <p>Вы можете закрыть эту страницу, или она сама закроется через 3 секунды.</p>\n" +
+                                            "                        </div>\n" +
+                                            "                    </div>",
+                                            ""
+                                        );
                                         setTimeout(() => {
                                             window.close();
                                         }, 3000)
