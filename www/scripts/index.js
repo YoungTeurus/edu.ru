@@ -427,6 +427,9 @@ function appendTestToEditTestsTable(editTestRowObject) {
                 $("<td>").text(getStringOrDash(editTestRowObject["closeDatetime"]))
             )
             .append(
+                $("<td>").text((editTestRowObject["locked"] === "1" ? "Закрыт" : "Открыт"))
+            )
+            .append(
                 $("<td>")
                     .append(
                         $("<button class=\"btn btn-primary\">")
@@ -490,6 +493,12 @@ function appendTestToEditTestsTable(editTestRowObject) {
                         question =>
                             appendQuestionToEditTestQuestionsTable(question, editTestRowObject["id"], msg["questions"], msg["answers"], msg["questionTypes"])
                     );
+                    $("#editTestQuestionsButton").on('click', () => {
+                        hideAllPlaceholdersExceptOne("editAnswersPlaceholder");
+                        console.log('Edit questions of test tId:', editTestRowObject["id"]);
+                        // Выводим все вопросы с ответами, открытыми для редактирования:
+                        setupAnswers(editTestRowObject["id"], msg["questions"], msg["answers"], msg["questionTypes"]);
+                    })
                 }
             }
         }).catch(e => console.log(e));
@@ -658,36 +667,36 @@ function appendQuestionToEditTestQuestionsTable(questionRowObject, testId, quest
             .append(
                 $("<td>").text(questionRowObject["questionTypeName"])
             )
-            .append(
-                $("<td>").append(
-                    $("<div class=\"container text-center\">").append(
-                        $("<div class=\"row mb-1\">").append(
-                            $("<div>").append(
-                                $("<button class=\"btn btn-primary\">")
-                                    .on('click', (e) => {
-                                        hideAllPlaceholdersExceptOne("editAnswersPlaceholder");
-                                        console.log('Edit question qId:', questionRowObject["id"]);
-                                        // TODO: код изменения вопроса
-                                        setupAnswers(testId, questionsArray, answersArray, questionTypes);
-                                    })
-                                    .text("Редактировать")
-                            )
-                        )
-                    ).append(
-                        $("<div class=\"row mb-1\">").append(
-                            $("<div>").append(
-                                $("<button class=\"btn btn-danger\">")
-                                    .on('click', (e) => {
-                                        hideAllPlaceholders();
-                                        console.log('Remove question qId:', questionRowObject["id"]);
-                                        // TODO: код удаления вопроса
-                                    })
-                                    .text("Удалить")
-                            )
-                        )
-                    )
-                )
-            )
+        // .append(
+        //     $("<td>").append(
+        //         $("<div class=\"container text-center\">").append(
+        //             $("<div class=\"row mb-1\">").append(
+        //                 $("<div>").append(
+        //                     $("<button class=\"btn btn-primary\">")
+        //                         .on('click', (e) => {
+        //                             hideAllPlaceholdersExceptOne("editAnswersPlaceholder");
+        //                             console.log('Edit question qId:', questionRowObject["id"]);
+        //                             // Выводим все вопросы с ответами, открытыми для редактирования:
+        //                             setupAnswers(testId, questionsArray, answersArray, questionTypes);
+        //                         })
+        //                         .text("Редактировать")
+        //                 )
+        //             )
+        //         ).append(
+        //             $("<div class=\"row mb-1\">").append(
+        //                 $("<div>").append(
+        //                     $("<button class=\"btn btn-danger\">")
+        //                         .on('click', (e) => {
+        //                             hideAllPlaceholders();
+        //                             console.log('Remove question qId:', questionRowObject["id"]);
+        //                             // TODO: код удаления вопроса
+        //                         })
+        //                         .text("Удалить")
+        //                 )
+        //             )
+        //         )
+        //     )
+        // )
     )
 }
 
@@ -698,26 +707,146 @@ function setupAnswers(testId, questionsArray, answersArray, questionTypes) {
     // Записываем в data всю информацию о вопросе
     tableBody.data('questions', questionsArray);
     tableBody.data('answers', answersArray);
+    tableBody.data('wasChanged', false); // Флаг, указывающий на то, было ли хоть одно значение в таблице изменено.
+    tableBody.data('canUpdate', true); // Флаг, указывающий на то, можно ли загрузить таблицу в БД без пересоздания, а лишь Update-а.
+
+
+    // Данная функция вызывается при изменении текста вопроса и/или типа вопроса
+    // Передаётся вниз по дереву в вызове appendQuestionInEditQuestionAnswersTable
+    const updateQuestion = (id, newQuestionText = null, newQuestionType = null, deleted = false) => {
+        if (deleted) {
+            tableBody.data('wasChanged', true);
+            tableBody.data('canUpdate', false);
+
+            // Удаляем вопросы и ответы с соответствующим id
+            tableBody.data('questions', tableBody.data('questions').filter(
+                qst => {
+                    return qst["id"] !== id;
+                }
+            ));
+            tableBody.data('answers', tableBody.data('answers').filter(
+                ans => {
+                    return ans["questionId"] !== id;
+                }
+            ));
+            return;
+        }
+        let temp = tableBody.data('questions').filter(
+            q => {
+                return q["id"] === id;
+            }
+        )[0];
+        console.log('Updating question id:', id, 'new qText:', newQuestionText, 'new qType', newQuestionType);
+        if (newQuestionText !== null) {
+            temp["text"] = newQuestionText;
+            tableBody.data('wasChanged', true);
+        }
+        if (newQuestionType !== null) {
+            temp["questionTypeId"] = newQuestionType;
+            tableBody.data('wasChanged', true);
+            tableBody.data('canUpdate', false);
+        }
+    }
+
+    const updateAnswer = (answerId, newAnswerText, newAnswerCorrectness, deleted = false, created = false, newAnswer = null) => {
+        if (deleted) {
+            tableBody.data('wasChanged', true);
+            tableBody.data('answers', tableBody.data('answers').filter(
+                ans => {
+                    return ans["answerId"] !== answerId;
+                }
+            ));
+            console.log('Deleting answer id:', answerId, 'new aText:', newAnswerText, 'new aCorr', newAnswerCorrectness);
+            return;
+        }
+        if (created) {
+            tableBody.data('wasChanged', true);
+            tableBody.data('answers').push(newAnswer);
+            console.log('Created answer id:', answerId, 'obj:', newAnswer);
+            return;
+        }
+        let temp = tableBody.data('answers').filter(
+            a => {
+                return a["answerId"] === answerId;
+            }
+        )[0];
+        console.log('Updating answer id:', answerId, 'new aText:', newAnswerText, 'new aCorr', newAnswerCorrectness);
+        if (newAnswerText !== null) {
+            temp["answer"] = newAnswerText;
+            tableBody.data('wasChanged', true);
+        }
+        if (newAnswerCorrectness !== null) {
+            temp["correct"] = newAnswerCorrectness;
+            tableBody.data('wasChanged', true);
+        }
+    }
+
+    // Создание вопросов из переданного массива:
     questionsArray.forEach(
         question => {
             appendQuestionInEditQuestionAnswersTable(testId, question, answersArray.filter(
                 answer => {
                     return answer["questionId"] === question.id
                 }
-            ))
-        }
-    );
-    questionTypes.forEach(
-        qType => {
-            $("#editQuestionAnswersTable .questionTypes").append(
-                $("<option>").val(qType["id"]).text(qType["name"])
-            )
+            ), questionTypes, updateQuestion, updateAnswer)
         }
     );
 
-    $("#editQuestionAnswersTable .questionTypes").each( function (){
-        $(this).val($(this).data('questionType'));
+    // Создание вопросов по нажатию кнопки:
+    $("#addQuestionToTest").on('click', () => {
+        console.log('Add question to test');
+        const tableBody = $("#editQuestionAnswersTable tbody");
+        tableBody.data('wasChanged', true);
+        tableBody.data('canUpdate', false);
+
+        const tempQuestion = {
+            id: (getMaxIdFromQuestions(tableBody.data('questions')) + 1).toString(),
+            hasCorrectAnswer: questionTypes[0]["hasCorrectAnswer"],
+            hasVariants: questionTypes[0]["hasVariants"],
+            questionTypeId: questionTypes[0]["id"],
+            questionTypeName: questionTypes[0]["name"],
+            text: "Новый вопрос",
+        }
+
+        appendQuestionInEditQuestionAnswersTable(testId, tempQuestion, [], questionTypes, updateQuestion, updateAnswer);
+        tableBody.data('questions').push(tempQuestion);
+
+        // Вовзвращает максимальный id, хранимый в массиве вопросов questions.
+        function getMaxIdFromQuestions(questionsArray) {
+            if (questionsArray.length > 0) {
+                let maxInt = 0;
+                questionsArray.forEach(
+                    question => {
+                        maxInt = Math.max(maxInt, parseInt(question["id"]));
+                    }
+                );
+                return maxInt;
+            } else {
+                return 0;
+            }
+        }
     });
+
+    $("#saveQuestionToTest").on('click', () => {
+        console.log('Save test');
+        const tableBody = $("#editQuestionAnswersTable tbody");
+        console.log(tableBody.data());
+    });
+}
+
+// Возвращает максимальный id, хранимый в массиве вопросов questions.
+function getMaxIdFromAnswers(answersArray) {
+    if (answersArray.length > 0) {
+        let maxInt = 0;
+        answersArray.forEach(
+            answer => {
+                maxInt = Math.max(maxInt, parseInt(answer["answerId"]));
+            }
+        );
+        return maxInt;
+    } else {
+        return 0;
+    }
 }
 
 // Очищает содержимое таблицы editQuestionAnswersTable
@@ -727,60 +856,118 @@ function clearEditQuestionAnswersTable() {
 }
 
 // Добавляет в таблицу editQuestionAnswersTable новую заполненную строку
-function appendQuestionInEditQuestionAnswersTable(testId, question, answersArray) {
+function appendQuestionInEditQuestionAnswersTable(testId, question, answersArray, questionTypes, updateQuestionFunc, updateAnswerFunc) {
     let answersTable = $("<span>").text("-");
-    if (question["hasCorrectAnswer"]) {
+    if (question["hasCorrectAnswer"] === "1") {
         answersTable = $("<table class=\"table border border-dark\">")
             .append(
                 $("<thead>").html(
                     "<th>Ответ</th>" +
-                    "<th>Правильный?</th>"
+                    "<th>Правильный?</th>" +
+                    "<th></th>"
                 )
             )
         answersArray.forEach(
-            answer => {
-                answersTable.append(
-                    $("<tr>")
-                        .append(
-                            $("<td>").append(
-                                $("<input class='form-control' type='text'>").val(answer["answer"])
-                            )
-                        )
-                        .append(
-                            $("<td>").append(
-                                $("<input class='form-check-input' type=\"checkbox\" " + (answer["correct"] === "1" ? 'checked' : '') + ">")
-                            )
-                        )
-                );
-            }
+            answ => addAnswerToTableInQuestion(answersTable, answ)
         );
     }
 
+    function addAnswerToTableInQuestion(answersTable, answer) {
+        const thisTr = $("<tr>");
+
+        answersTable.append(
+            thisTr
+                .append(
+                    $("<td>").append(
+                        $("<input class='form-control' type='text'>").val(answer["answer"])
+                            .on('change', function () {
+                                // При изменении текста ответа:
+                                updateAnswerFunc(answer["answerId"], $(this).val(), null);
+                            })
+                    )
+                )
+                .append(
+                    $("<td>").append(
+                        $("<input class='form-check-input' type=\"checkbox\" " + (answer["correct"] === "1" ? 'checked' : '') + ">")
+                            .on('click', function () {
+                                // При изменении правильности ответа:
+                                updateAnswerFunc(answer["answerId"], null, ($(this).is(":checked") ? "1" : "0"));
+                            })
+                    )
+                )
+                .append(
+                    $("<td>").append(
+                        $("<button class='btn btn-danger'>").text('X')
+                            .on('click', function () {
+                                console.log('Delete questionId:', question["id"])
+                                thisTr.remove();
+                                updateAnswerFunc(answer["answerId"], null, null, true);
+                            })
+                    )
+                )
+        );
+    }
+
+    const select = $("<select class='questionTypes'>")
+        .data('questionType', question["questionTypeId"]);
+
+    questionTypes.forEach(
+        qType => {
+            select.append(
+                $("<option>").val(qType["id"]).text(qType["name"])
+            )
+        }
+    );
+
+    const tRow = $("<tr>");
+
     $("#editQuestionAnswersTable tbody").append(
-        $("<tr>")
+        tRow
             .append(
                 $("<th scope=\"row\">").text(question["id"])
             )
             .append(
                 $("<td>").append(
                     $("<textarea class='form-control' rows='3'>").val(question["text"])
+                        .on('change', function () {
+                            // При изменении текста вопроса
+                            tRow.data('questionText', $(this).val());
+                            updateQuestionFunc(question["id"], $(this).val(), null);
+                        })
                 )
             )
             .append(
                 $("<td>").append(
-                    $("<select class='questionTypes'>")
-                        .data('questionType', question["questionTypeId"])
+                    select.val(question["questionTypeId"])
+                        .on('change', function () {
+                            // При изменении типа вопроса
+                            tRow.data('questionType', $(this).val());
+                            updateQuestionFunc(question["id"], null, $(this).val());
+                        })
                 )
             )
             .append(
                 $("<td>").append(
                     answersTable
+                        .data('answers', answersArray)
                 ).append(
-                    $("<button class='btn btn-outline-secondary'>")
-                        .text("Добавить ответ")
-                        .on('click', e => {
-                            console.log('Add answer to qId:', question["id"]);
-                        })
+                    (question["hasCorrectAnswer"] === "1" ?
+                        $("<button class='btn btn-outline-secondary'>")
+                            .text("Добавить ответ")
+                            .on('click', e => {
+                                console.log('Add answer to qId:', question["id"]);
+                                // TODO: добавление нового ответа
+                                let tempAnswer = {
+                                    answer: "",
+                                    answerId: (getMaxIdFromAnswers(answersArray) + 1).toString(),
+                                    correct: "0",
+                                    questionId: question["id"],
+                                }
+                                updateAnswerFunc(tempAnswer["answerId"], null, null, false, true, tempAnswer);
+                                addAnswerToTableInQuestion(answersTable, tempAnswer);
+                            })
+                        :
+                        null)
                 )
             )
             .append(
@@ -788,8 +975,10 @@ function appendQuestionInEditQuestionAnswersTable(testId, question, answersArray
                     $("<div class=\"row mb-1\">").append($("<div>").append(
                         $("<button class=\"btn btn-danger\">")
                             .text("Удалить")
-                            .on('click', e => {
-                                console.log('Delete question qId:', question["id"])
+                            .on('click', function () {
+                                console.log('Delete question qId:', question["id"]);
+                                tRow.remove();
+                                updateQuestionFunc(question["id"], null, null, true);
                             })
                     ))
                 ))
@@ -923,6 +1112,7 @@ $(() => {
     $('#checkTests').on('click', e => {
         e.preventDefault();
     });
+
     const addStudentsGroupToTestButton = $('#addStudentsGroupToTest');
     addStudentsGroupToTestButton.on('click', addStudentsGroupToTestClickHandler);
 

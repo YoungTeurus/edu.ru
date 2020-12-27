@@ -174,9 +174,9 @@ function GetTestAnswers($db, $testId)
 function GetTestAnswersWithCorrectness($db, $testId)
 {
     $returnArray = array();
-    $getTestTries = $db->prepare("SELECT questionId, answer, correct
-                                        FROM testsanswers ta JOIN testquestions tq on tq.testId = ta.testId and tq.id = ta.questionId JOIN questiontypes q on q.id = tq.questionType and hasCorrectAnswer = 1
-                                        WHERE ta.testId = :testId;");
+    $getTestTries = $db->prepare("SELECT ta.id AS answerId, questionId, answer, correct
+                                    FROM testsanswers ta JOIN testquestions tq on tq.testId = ta.testId and tq.id = ta.questionId JOIN questiontypes q on q.id = tq.questionType and hasCorrectAnswer = 1
+                                    WHERE ta.testId = :testId;");
     $getTestTries->bindParam(':testId', $_testId);
 
     $_testId = $testId;
@@ -267,7 +267,7 @@ function IfUserCanEditTests($db, $userId){
 function GetAllTests($db){
     $returnArray = array();
     // Возвращает id пользователя, ник пользователя и дату окончания "сессии" для пользователя с заданным хешем входа и IP-адресом:
-    $getAllTests = $db->prepare("SELECT id, name, creationDatetime, openDatetime, closeDatetime, maxTries, timeToComplete FROM tests;");
+    $getAllTests = $db->prepare("SELECT id, name, creationDatetime, openDatetime, closeDatetime, maxTries, timeToComplete, locked FROM tests;");
 
     if ($getAllTests->execute()) {
         if ($getAllTests->rowCount() > 0) {
