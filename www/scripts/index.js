@@ -58,7 +58,7 @@ function appendNewAvailableTest(testRowObject) {
     testRowObject._status = _status;
 
     $("#availableTests tbody").append(
-        $("<tr>")
+        $("<tr class='testRow'>")
             .append(
                 $("<th scope='row'>").text(testRowObject["name"])
             )
@@ -365,6 +365,33 @@ function doAfterCheckingLoginStatus(logined) {
     }
 }
 
+const placeholders = [
+    "editGroupsAvailabilityPlaceholder",
+    "editQuestionsPlaceholder",
+    "editAnswersPlaceholder",
+];
+
+// Скрывает элемент, добавляя ему класс hidden
+function hideElement(selector) {
+    $(selector).addClass('hidden');
+}
+
+// Отменяет скрытие элемента, убирая ему класс hidden
+function unhideElement(selector) {
+    $(selector).removeClass('hidden');
+}
+
+// Делает все PlaceHolder-ы скрытыми
+function hideAllPlaceholders() {
+    placeholders.forEach(placeholder => hideElement("#" + placeholder));
+}
+
+// Делает все PlaceHolder-ы скрытыми, затем отменяет скрытие одного элемента
+function hideAllPlaceholdersExceptOne(showPlaceholder) {
+    hideAllPlaceholders();
+    unhideElement("#" + showPlaceholder);
+}
+
 // Возваращает информацию о всех тестах
 function getAllTests() {
     let data = {form: {}};
@@ -411,10 +438,7 @@ function appendTestToEditTestsTable(editTestRowObject) {
                 $("<td>")
                     .append(
                         $("<button class=\"btn btn-primary\">")
-                            .on('click', () => {
-                                console.log('Edit questions testId: ', editTestRowObject["id"]);
-                                // TODO: Код для кнопки редактирования вопросов
-                            })
+                            .on('click', () => editQuestionsOfTest(editTestRowObject))
                             .text("Редактировать")
                     )
             )
@@ -451,20 +475,41 @@ function appendTestToEditTestsTable(editTestRowObject) {
             )
     );
 
+    function editQuestionsOfTest(editTestRowObject) {
+        hideAllPlaceholdersExceptOne("editQuestionsPlaceholder");
+        console.log('Edit questions testId: ', editTestRowObject["id"]);
+        // TODO: Код для кнопки редактирования вопросов
+        // Подготваливаем placeHolder
+        setupEditQuestionsPlaceholder(editTestRowObject["id"], editTestRowObject["name"]);
+        getTestQuestionsForEdit(editTestRowObject["id"]).then(msg => {
+            console.log(msg);
+            if (msg["success"]) {
+                if (!msg["error"]) {
+                    // Заполяем вопросы:
+                    msg["questions"].forEach(
+                        question =>
+                            appendQuestionToEditTestQuestionsTable(question, editTestRowObject["id"], msg["questions"], msg["answers"], msg["questionTypes"])
+                    );
+                }
+            }
+        }).catch(e => console.log(e));
+    }
+
     function editStudentsGroupsOfTest(editTestRowObject) {
         console.log('Edit groups of testId: ', editTestRowObject["id"]);
+        hideAllPlaceholdersExceptOne("editGroupsAvailabilityPlaceholder");
         // Код для кнопки редактирования групп
         getTestStudentsGroups(editTestRowObject["id"]).then(msg => {
             console.log(msg);
-            // TODO: дополнить
             if (msg["success"]) {
                 if (!msg["error"]) {
                     const optionsArray = Array();
                     msg["allStudentsGroups"].forEach(studentsGroup => {
                         optionsArray.push(getSelectOption(studentsGroup["name"], studentsGroup["id"]));
                     });
-                    setupGroupsAvailability(editTestRowObject["id"], editTestRowObject["name"], optionsArray);
-                    msg["testStudentsGroups"].forEach(studentGroup => appendGroupToGroupsAvailabilityTable(studentGroup));
+                    // TODO: вынести следующую строку выше .then(), разбив подготвку на две части
+                    setupGroupsAvailabilityPlaceholder(editTestRowObject["id"], editTestRowObject["name"], optionsArray);
+                    msg["testStudentsGroups"].forEach(studentGroup => appendGroupToGroupsAvailabilityTable(studentGroup, editTestRowObject["id"]));
                 }
             }
         }).catch(e => console.log(e));
@@ -491,7 +536,7 @@ function getTestStudentsGroups(testId) {
 //  - Заменяет option-ы select-а
 //  - Добавляет data для кнопки добавления группы
 //  - Очищает содержимое таблицы groupsAvailabilityTable
-function setupGroupsAvailability(testId, testName, optionsArray) {
+function setupGroupsAvailabilityPlaceholder(testId, testName, optionsArray) {
     $("#editGroupsAvailabilityTestName").text(testName);
     setSelectOptions("#editGroupsGroupName", optionsArray);
     $('#addStudentsGroupToTest').data('testId', testId)
@@ -505,7 +550,7 @@ function clearGroupsAvailabilityTable() {
 }
 
 // Добавляет группу к тесту, обновляя список групп, которым доступно выполнение теста
-function addStudentGroupToTest(testId, groupId){
+function addStudentGroupToTest(testId, groupId) {
     let data = {form: {}};
     data["form"]["action"] = "addStudentsGroupToTest";
     data["form"]["testId"] = testId;
@@ -519,7 +564,7 @@ function addStudentGroupToTest(testId, groupId){
 }
 
 // Добавляет группу в таблицу групп для редактирования
-function appendGroupToGroupsAvailabilityTable(groupRowObject) {
+function appendGroupToGroupsAvailabilityTable(groupRowObject, testId) {
     $("#groupsAvailabilityTable tbody").append(
         $("<tr>").append(
             $("<th scope=\"row\">").text(groupRowObject["name"])
@@ -529,10 +574,7 @@ function appendGroupToGroupsAvailabilityTable(groupRowObject) {
                     $("<div class=\"row mb-1\">").append(
                         $("<div>").append(
                             $("<button class=\"btn btn-danger\">")
-                                .on('click', () => {
-                                    // TODO: Код для удаления группы.
-                                    console.log('Delete group: ', groupRowObject["id"]);
-                                })
+                                .on('click', e => deleteGroupFromTestsButtonHandle(e, testId))
                                 .text("Удалить")
                         )
                     )
@@ -540,6 +582,222 @@ function appendGroupToGroupsAvailabilityTable(groupRowObject) {
             )
         )
     )
+
+    function deleteGroupFromTestsButtonHandle(e, testId) {
+        // Код для удаления группы.
+        console.log('Delete group: ', groupRowObject["id"]);
+        e.preventDefault();
+        e.target.setAttribute('disabled', true);
+        deleteStudentGroupFromTest(testId, groupRowObject["id"]).then(
+            msg => {
+                console.log(msg);
+                if (msg["success"]) {
+                    if (!msg["error"]) {
+                        if (msg["removed"]) {
+                            clearGroupsAvailabilityTable();
+                            msg["currentTestStudentsGroups"].forEach(group => appendGroupToGroupsAvailabilityTable(group));
+                        }
+                    }
+                }
+            }
+        ).catch(e => console.log(e));
+    }
+}
+
+// Удаляет группу из таблицы групп для редактирования
+function deleteStudentGroupFromTest(testId, groupId) {
+    let data = {form: {}};
+    data["form"]["action"] = "removeStudentsGroupFromTest";
+    data["form"]["testId"] = testId;
+    data["form"]["groupId"] = groupId;
+    console.log(data);
+    return postAjax(
+        siteURL + '/tests.php',
+        data,
+        new ConnectException("Произошла ошибка при отправке запроса на удаление студенческой группы к тесту!")
+    );
+}
+
+// Возвращает информацию о вопросах теста с их ответами
+function getTestQuestionsForEdit(testId) {
+    let data = {form: {}};
+    data["form"]["action"] = "getTestQuestionsForEdit";
+    data["form"]["testId"] = testId;
+    console.log(data);
+    return postAjax(
+        siteURL + '/tests.php',
+        data,
+        new ConnectException("Произошла ошибка при отправке запроса на получение информации о вопросах теста!")
+    );
+}
+
+// Настраивает editQuestionsPlaceholder
+// optionsArray содержит массив объектов типа selectOption (см. выше)
+//  - Изменяет название блока
+//  - Очищает содержимое таблицы groupsAvailabilityTable
+function setupEditQuestionsPlaceholder(testId, testName) {
+    $("#editQuestionsTestName").text(testName);
+    clearEditTestQuestionsTable();
+}
+
+// Очищает содержимое таблицы editTestQuestionsTable
+// TODO: вынести функционал в отдельную функцию с параметром?
+function clearEditTestQuestionsTable() {
+    $("#editTestQuestionsTable tbody tr").remove();
+}
+
+// Добавляет вопрос в таблицу вопросов для редактирования
+function appendQuestionToEditTestQuestionsTable(questionRowObject, testId, questionsArray, answersArray, questionTypes) {
+    $("#editTestQuestionsTable tbody").append(
+        $("<tr>").append(
+            $("<th scope=\"row\">").text(questionRowObject["id"])
+        )
+            .append(
+                $("<td>").text(questionRowObject["text"])
+            )
+            .append(
+                $("<td>").text(questionRowObject["questionTypeName"])
+            )
+            .append(
+                $("<td>").append(
+                    $("<div class=\"container text-center\">").append(
+                        $("<div class=\"row mb-1\">").append(
+                            $("<div>").append(
+                                $("<button class=\"btn btn-primary\">")
+                                    .on('click', (e) => {
+                                        hideAllPlaceholdersExceptOne("editAnswersPlaceholder");
+                                        console.log('Edit question qId:', questionRowObject["id"]);
+                                        // TODO: код изменения вопроса
+                                        setupAnswers(testId, questionsArray, answersArray, questionTypes);
+                                    })
+                                    .text("Редактировать")
+                            )
+                        )
+                    ).append(
+                        $("<div class=\"row mb-1\">").append(
+                            $("<div>").append(
+                                $("<button class=\"btn btn-danger\">")
+                                    .on('click', (e) => {
+                                        hideAllPlaceholders();
+                                        console.log('Remove question qId:', questionRowObject["id"]);
+                                        // TODO: код удаления вопроса
+                                    })
+                                    .text("Удалить")
+                            )
+                        )
+                    )
+                )
+            )
+    )
+}
+
+// Очищает и заполняет таблицу editQuestionAnswersTable
+function setupAnswers(testId, questionsArray, answersArray, questionTypes) {
+    clearEditQuestionAnswersTable();
+    const tableBody = $("#editQuestionAnswersTable tbody");
+    // Записываем в data всю информацию о вопросе
+    tableBody.data('questions', questionsArray);
+    tableBody.data('answers', answersArray);
+    questionsArray.forEach(
+        question => {
+            appendQuestionInEditQuestionAnswersTable(testId, question, answersArray.filter(
+                answer => {
+                    return answer["questionId"] === question.id
+                }
+            ))
+        }
+    );
+    questionTypes.forEach(
+        qType => {
+            $("#editQuestionAnswersTable .questionTypes").append(
+                $("<option>").val(qType["id"]).text(qType["name"])
+            )
+        }
+    );
+
+    $("#editQuestionAnswersTable .questionTypes").each( function (){
+        $(this).val($(this).data('questionType'));
+    });
+}
+
+// Очищает содержимое таблицы editQuestionAnswersTable
+// TODO: вынести функционал в отдельную функцию с параметром?
+function clearEditQuestionAnswersTable() {
+    $("#editQuestionAnswersTable tbody tr").remove();
+}
+
+// Добавляет в таблицу editQuestionAnswersTable новую заполненную строку
+function appendQuestionInEditQuestionAnswersTable(testId, question, answersArray) {
+    let answersTable = $("<span>").text("-");
+    if (question["hasCorrectAnswer"]) {
+        answersTable = $("<table class=\"table border border-dark\">")
+            .append(
+                $("<thead>").html(
+                    "<th>Ответ</th>" +
+                    "<th>Правильный?</th>"
+                )
+            )
+        answersArray.forEach(
+            answer => {
+                answersTable.append(
+                    $("<tr>")
+                        .append(
+                            $("<td>").append(
+                                $("<input class='form-control' type='text'>").val(answer["answer"])
+                            )
+                        )
+                        .append(
+                            $("<td>").append(
+                                $("<input class='form-check-input' type=\"checkbox\" " + (answer["correct"] === "1" ? 'checked' : '') + ">")
+                            )
+                        )
+                );
+            }
+        );
+    }
+
+    $("#editQuestionAnswersTable tbody").append(
+        $("<tr>")
+            .append(
+                $("<th scope=\"row\">").text(question["id"])
+            )
+            .append(
+                $("<td>").append(
+                    $("<textarea class='form-control' rows='3'>").val(question["text"])
+                )
+            )
+            .append(
+                $("<td>").append(
+                    $("<select class='questionTypes'>")
+                        .data('questionType', question["questionTypeId"])
+                )
+            )
+            .append(
+                $("<td>").append(
+                    answersTable
+                ).append(
+                    $("<button class='btn btn-outline-secondary'>")
+                        .text("Добавить ответ")
+                        .on('click', e => {
+                            console.log('Add answer to qId:', question["id"]);
+                        })
+                )
+            )
+            .append(
+                $("<td>").append($("<div class=\"container text-center\">").append(
+                    $("<div class=\"row mb-1\">").append($("<div>").append(
+                        $("<button class=\"btn btn-danger\">")
+                            .text("Удалить")
+                            .on('click', e => {
+                                console.log('Delete question qId:', question["id"])
+                            })
+                    ))
+                ))
+            )
+            .data('questionId', question["id"])
+            .data('questionText', question["text"])
+            .data('questionType', question["questionTypeId"])
+    );
 }
 
 $(() => {
@@ -567,6 +825,10 @@ $(() => {
                         console.log("Успешно вошли!");
                         $("#loginCompleted")[0].classList.remove('hidden');
                         $("#loginForm")[0].classList.add('hidden');
+                        // Перезагружаем страницу через 1 секунду
+                        setTimeout(() => {
+                            document.location.reload();
+                        }, 1000)
                     } else {
                         $("#luserPasswordValidation")
                             .text(msg["error"]);
@@ -625,56 +887,76 @@ $(() => {
     });
     $('#logOut').on('click', e => {
         e.preventDefault();
-        // Показываем спиннер:
-        $("#loginFormLoader")[0].style.display = "";
-        // Скрываем блок краткого описания выхода из аккаунта.
-        $("#userShortInfo")[0].classList.add("hidden");
+
         logOutOfAccount()
             .then(
                 msg => {
                     console.log(msg);
-                    // Скрываем спиннер:
-                    $("#loginFormLoader")[0].style.display = "none";
-                    // Показываем блок входа.
-                    $("#loginForm")[0].classList.remove("hidden");
+                    setTimeout(() => {
+                        document.location.reload();
+                    }, 1000)
                 }
             )
-            .catch(
-                e => console.log(e)
-            );
+            .catch(e => console.log(e));
     });
     $('#editTests').on('click', e => {
         e.preventDefault();
+        unhideElement("#editTestsTable");
+        // Очищаем список тестов
         clearEditTestsTable();
         getAllTests().then(
-            msg => {
-                console.log(msg);
-                if (msg["success"]) {
-                    if (!msg["error"]) {
-                        msg["tests"].forEach(
-                            test => appendTestToEditTestsTable(test)
-                        );
-                    }
+            // Заполняем список тестов
+            getAllTestsHandler
+        ).catch(e => console.log(e));
+
+        function getAllTestsHandler(msg) {
+            console.log(msg);
+            if (msg["success"]) {
+                if (!msg["error"]) {
+                    msg["tests"].forEach(
+                        test => appendTestToEditTestsTable(test)
+                    );
                 }
             }
-        ).catch(e => console.log(e));
+        }
     });
     $('#checkTests').on('click', e => {
         e.preventDefault();
     });
-    $('#addStudentsGroupToTest').on('click', e =>{
+    const addStudentsGroupToTestButton = $('#addStudentsGroupToTest');
+    addStudentsGroupToTestButton.on('click', addStudentsGroupToTestClickHandler);
+
+    // Добавляет группу к списку и обновляет список
+    function addStudentsGroupToTestClickHandler(e) {
         e.preventDefault();
-        const _this = $('#addStudentsGroupToTest');
-        if (_this.data('testId') === undefined){
+        const _this = addStudentsGroupToTestButton;
+        if (_this.data('testId') === undefined) {
             // Если данные не заданы, значит тест для изменения группы ещё не был выбран.
-            // Данные для данной кнопки задаются внутри f setupGroupsAvailability.
+            // Данные для данной кнопки задаются внутри f setupGroupsAvailabilityPlaceholder.
             return;
         }
-        addStudentGroupToTest(_this.data('testId'),$("#editGroupsGroupName").val())
-            .then( msg => {
-                console.log(msg);
-            }).catch(e => console.log(e));
-    });
+        // Показываем спиннер:
+        _this.find(".spinner").removeClass('hidden');
+        // Отправляем запрос на сервер:
+        addStudentGroupToTest(_this.data('testId'), $("#editGroupsGroupName").val())
+            .then(
+                addStudentGroupToTestHandle
+            ).catch(e => console.log(e));
+
+        function addStudentGroupToTestHandle(msg) {
+            console.log(msg);
+            if (msg["success"]) {
+                if (!msg["error"]) {
+                    if (msg["added"]) {
+                        clearGroupsAvailabilityTable();
+                        msg["currentTestStudentsGroups"].forEach(group => appendGroupToGroupsAvailabilityTable(group));
+                    }
+                }
+            }
+            // Скрываем спиннер:
+            _this.find(".spinner").addClass('hidden');
+        }
+    }
 
     checkUserLoginStatus()
         .catch(e => console.log(e))

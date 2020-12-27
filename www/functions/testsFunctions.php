@@ -132,9 +132,9 @@ function IsTestStartedByUser($db, $testId, $userId)
 function GetTestQuestions($db, $testId)
 {
     $returnArray = array();
-    $getTestQuestions = $db->prepare("SELECT id, text, questionType
-                                    FROM testquestions
-                                    WHERE testId = :testId;");
+    $getTestQuestions = $db->prepare("SELECT testquestions.id AS id, text, q.id AS questionTypeId, name AS questionTypeName, description AS questionTypeDescription, hasCorrectAnswer, hasVariants
+                            FROM testquestions JOIN questiontypes q on q.id = testquestions.questionType
+                            WHERE testId = :testId;");
     $getTestQuestions->bindParam(':testId', $_testId);
 
     $_testId = $testId;
@@ -149,11 +149,33 @@ function GetTestQuestions($db, $testId)
 }
 
 // Возвращает массив типа "номер вопроса - вариант ответа"
+// Возвращает ответы для заданий, у которых hasVariants = 1 !
 function GetTestAnswers($db, $testId)
 {
     $returnArray = array();
     $getTestTries = $db->prepare("SELECT questionId, answer
                                         FROM testsanswers ta JOIN testquestions tq on tq.testId = ta.testId and tq.id = ta.questionId JOIN questiontypes q on q.id = tq.questionType and hasVariants = 1
+                                        WHERE ta.testId = :testId;");
+    $getTestTries->bindParam(':testId', $_testId);
+
+    $_testId = $testId;
+
+    if ($getTestTries->execute()) {
+        if ($getTestTries->rowCount() > 0) {
+            $returnArray = $getTestTries->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
+
+    return $returnArray;
+}
+
+// Возвращает массив типа "номер вопроса - вариант ответа - правильный ли ответ".
+// Возвращает ответы для заданий, у которых hasCorrectAnswer = 1 !
+function GetTestAnswersWithCorrectness($db, $testId)
+{
+    $returnArray = array();
+    $getTestTries = $db->prepare("SELECT questionId, answer, correct
+                                        FROM testsanswers ta JOIN testquestions tq on tq.testId = ta.testId and tq.id = ta.questionId JOIN questiontypes q on q.id = tq.questionType and hasCorrectAnswer = 1
                                         WHERE ta.testId = :testId;");
     $getTestTries->bindParam(':testId', $_testId);
 
@@ -302,5 +324,34 @@ function AddStudentsGroupToTest($db, $testId, $groupId){
     }
 
     return false;
+}
+
+function RemoveStudentsGroupFromTest($db, $testId, $groupId){
+    $addStudentsGroupToTest = $db->prepare("CALL RemoveStudentsGroupFromTest(:testId, :studentsgroupId);");
+    $addStudentsGroupToTest->bindParam(':testId', $_testId);
+    $addStudentsGroupToTest->bindParam(':studentsgroupId', $_groupId);
+
+    $_testId = $testId;
+    $_groupId = $groupId;
+
+    if ($addStudentsGroupToTest->execute()) {
+        return true;
+    }
+
+    return false;
+}
+
+// Вовзвращает массив типов вопросов
+function GetQuestionTypes($db){
+    $returnArray = array();
+    $getQuestionTypes = $db->prepare("SELECT id, name, description, hasCorrectAnswer, hasVariants FROM questiontypes;");
+
+    if ($getQuestionTypes->execute()) {
+        if ($getQuestionTypes->rowCount() > 0) {
+            $returnArray = $getQuestionTypes->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
+
+    return $returnArray;
 }
 ?>

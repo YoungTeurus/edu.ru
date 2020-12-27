@@ -25,6 +25,35 @@ if (isset($_POST["form"])){
     makeArrayValuesSafe($_POST["form"]);
     $userStatus = checkIfUserLogined($db, $_SERVER['REMOTE_ADDR'], $_COOKIE['loginHash']);
     switch ($_POST["form"]["action"]){
+        case "addStudentsGroupToTest":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if (IfUserCanEditTests($db, $userStatus->userId)){
+                    // Если у пользователя достаточно полномочий:
+                    if (isset($_POST["form"]["testId"]) && isset($_POST["form"]["groupId"])){
+                        // Если необходимое значение передано
+                        $message["added"] = AddStudentsGroupToTest($db, $_POST["form"]["testId"], $_POST["form"]["groupId"]);
+                        if ($message["added"]){
+                            $message["currentTestStudentsGroups"] = GetTestStudentsGroups($db, $_POST["form"]["testId"]);
+                        }
+                    } else {
+                        // Если необходимое значение не передано.
+                        $message["error"] = true;
+                        $message["errorText"] = "Не было передано одно из следующих значений: testId, groupId.";
+                    }
+                } else {
+                    // Если у пользователя недостаточно полномочий:
+                    $message["error"] = true;
+                    $message["errorText"] = "Пользователь не имеет прав на получение списка всех тестов.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
         case "getAvailableTests":{
             if ($userStatus->logined) {
                 // Если пользователь авторизован:
@@ -83,18 +112,75 @@ if (isset($_POST["form"])){
             $message["success"] = true;
             break;
         }
-        case "addStudentsGroupToTest":{
+        case "getTestTries":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if (isset($_POST["form"]["testId"])){
+                    // Если необходимое значение передано
+                    $message["testTries"] = GetTestTries($db, $userStatus->userId, $_POST["form"]["testId"]);
+                } else {
+                    // Если необходимое значение не передано.
+                    $message["error"] = true;
+                    $message["errorText"] = "Не было передано одно из следующих значений: testId.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
+        case "getTestQuestions":{
+            // Получить список вопросов и ответов теста для прохождения
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if (isset($_POST["form"]["testId"])){
+                    // Если необходимое значение передано
+                    // Проверяем, доступен ли этот тест пользователю:
+                    if (IsTestAvailableForUser($db, $_POST["form"]["testId"], $userStatus->userId)){
+                        if (IsTestStartedByUser($db, $_POST["form"]["testId"], $userStatus->userId)){
+                            $message["testInfo"] = GetTestInfo($db, $_POST["form"]["testId"]);
+                            $message["questions"] = GetTestQuestions($db, $_POST["form"]["testId"]);
+                            $message["answers"] = GetTestAnswers($db, $_POST["form"]["testId"]);
+                        } else {
+                            // Если пользователь запросил тест, который он не начал
+                            $message["error"] = true;
+                            $message["errorText"] = "Запрошен тест, который не был начат.";
+                        }
+                    } else {
+                        // Если пользователь запросил тест, к которому не имеет доступа
+                        $message["error"] = true;
+                        $message["errorText"] = "Запрошен тест, доступ к которому запрещён.";
+                    }
+                } else {
+                    // Если необходимое значение не передано.
+                    $message["error"] = true;
+                    $message["errorText"] = "Не было передано одно из следующих значений: testId.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
+        case "getTestQuestionsForEdit":{
+            // Получить список вопросов и ответов для их редактирования
             if ($userStatus->logined) {
                 // Если пользователь авторизован:
                 if (IfUserCanEditTests($db, $userStatus->userId)){
                     // Если у пользователя достаточно полномочий:
-                    if (isset($_POST["form"]["testId"]) && isset($_POST["form"]["groupId"])){
+                    if (isset($_POST["form"]["testId"])){
                         // Если необходимое значение передано
-                        $message["added"] = AddStudentsGroupToTest($db, $_POST["form"]["testId"], $_POST["form"]["groupId"]);
+                        $message["questions"] = GetTestQuestions($db, $_POST["form"]["testId"]);
+                        $message["answers"] = GetTestAnswersWithCorrectness($db, $_POST["form"]["testId"]);
+                        $message["questionTypes"] = GetQuestionTypes($db);
                     } else {
                         // Если необходимое значение не передано.
                         $message["error"] = true;
-                        $message["errorText"] = "Не было передано одно из следующих значений: testId, groupId.";
+                        $message["errorText"] = "Не было передано одно из следующих значений: testId.";
                     }
                 } else {
                     // Если у пользователя недостаточно полномочий:
@@ -109,16 +195,26 @@ if (isset($_POST["form"])){
             $message["success"] = true;
             break;
         }
-        case "getTestTries":{
+        case "removeStudentsGroupFromTest":{
             if ($userStatus->logined) {
                 // Если пользователь авторизован:
-                if (isset($_POST["form"]["testId"])){
-                    // Если необходимое значение передано
-                    $message["testTries"] = GetTestTries($db, $userStatus->userId, $_POST["form"]["testId"]);
+                if (IfUserCanEditTests($db, $userStatus->userId)){
+                    // Если у пользователя достаточно полномочий:
+                    if (isset($_POST["form"]["testId"]) && isset($_POST["form"]["groupId"])){
+                        // Если необходимое значение передано
+                        $message["removed"] = RemoveStudentsGroupFromTest($db, $_POST["form"]["testId"], $_POST["form"]["groupId"]);
+                        if ($message["removed"]){
+                            $message["currentTestStudentsGroups"] = GetTestStudentsGroups($db, $_POST["form"]["testId"]);
+                        }
+                    } else {
+                        // Если необходимое значение не передано.
+                        $message["error"] = true;
+                        $message["errorText"] = "Не было передано одно из следующих значений: testId, groupId.";
+                    }
                 } else {
-                    // Если необходимое значение не передано.
+                    // Если у пользователя недостаточно полномочий:
                     $message["error"] = true;
-                    $message["errorText"] = "Не было передано одно из следующих значений: testId.";
+                    $message["errorText"] = "Пользователь не имеет прав на получение списка всех тестов.";
                 }
             } else {
                 // Если пользователь не авторизован:
@@ -145,40 +241,6 @@ if (isset($_POST["form"])){
                         // Если пользователь не может начать этот тест.
                         $message["error"] = true;
                         $message["errorText"] = "Пользователь не может начать данный тест.";
-                    }
-                } else {
-                    // Если необходимое значение не передано.
-                    $message["error"] = true;
-                    $message["errorText"] = "Не было передано одно из следующих значений: testId.";
-                }
-            } else {
-                // Если пользователь не авторизован:
-                $message["error"] = true;
-                $message["errorText"] = "Пользователь не авторизован.";
-            }
-            $message["success"] = true;
-            break;
-        }
-        case "getTestQuestions":{
-            if ($userStatus->logined) {
-                // Если пользователь авторизован:
-                if (isset($_POST["form"]["testId"])){
-                    // Если необходимое значение передано
-                    // Проверяем, доступен ли этот тест пользователю:
-                    if (IsTestAvailableForUser($db, $_POST["form"]["testId"], $userStatus->userId)){
-                        if (IsTestStartedByUser($db, $_POST["form"]["testId"], $userStatus->userId)){
-                            $message["testInfo"] = GetTestInfo($db, $_POST["form"]["testId"]);
-                            $message["questions"] = GetTestQuestions($db, $_POST["form"]["testId"]);
-                            $message["answers"] = GetTestAnswers($db, $_POST["form"]["testId"]);
-                        } else {
-                            // Если пользователь запросил тест, который он не начал
-                            $message["error"] = true;
-                            $message["errorText"] = "Запрошен тест, который не был начат.";
-                        }
-                    } else {
-                        // Если пользователь запросил тест, к которому не имеет доступа
-                        $message["error"] = true;
-                        $message["errorText"] = "Запрошен тест, доступ к которому запрещён.";
                     }
                 } else {
                     // Если необходимое значение не передано.
