@@ -20,6 +20,7 @@ const triesStasuses = {
 
 const scoreRanges = {
     ranges: [0, 50, 75, 90, 100],
+    unknown: "❓",
     0: "❌",
     50: "❗",
     75: "✔",
@@ -214,134 +215,16 @@ async function getAvailableTests() {
     );
 }
 
-// Очищает таблицу доступных тестов
-function clearAvailableTests() {
-    $("#availableTests tbody tr").remove();
-}
-
-// Добавляет в таблицу новый тест
-function appendNewAvailableTest(testRowObject) {
-    // Вычисление статуса:
-    let _status = (testRowObject["isCompleted"] === "1" ? (
-            testRowObject["inProgress"] === "1" ? (
-                // Если был выполнен, но сейчас запущена ещё одна попытка:
-                testsStatuses.completedInProgress
-            ) : (
-                // Если был выполнен:
-                ((testRowObject["maxTries"] === "-1" || testRowObject["maxTries"] > testRowObject["usedTries"]) ?
-                    // Если попыток больше, чем сделано (или их бесконечно много):
-                    testsStatuses.completedCanTryAgain :
-                    // Если попыток не осталось
-                    testsStatuses.completed)
-            )
-
-        ) : (
-            // Если ещё не выполнен:
-            (testRowObject["usedTries"] > 0 ?
-                    // Если сделана хотя бы одна попытка и она не закончена:
-                    testsStatuses.inProgress :
-                    // Если ещё ни одной попытки не сделано :
-                    (
-                        (testRowObject["openDatetime"] === null && testRowObject["closeDatetime"] === null) ?
-                            // Если время открытия/закрытия теста не указано
-                            testsStatuses.available :
-                            (
-                                ((testRowObject["openDatetime"] !== null)
-                                    && (new Date(Date.now()).getTime() < new Date(testRowObject["openDatetime"]).getTime())) ?
-                                    // Если тест скоро откроется
-                                    testsStatuses.availableInTime :
-                                    (
-                                        ((testRowObject["closeDatetime"] !== null)
-                                            && (new Date(Date.now()).getTime() < new Date(testRowObject["closeDatetime"]).getTime())) ?
-                                            // Если тест ещё не закрыт:
-                                            testsStatuses.available :
-                                            // Если тест уже закрыт:
-                                            testsStatuses.notAvailable
-                                    )
-                            )
-                    )
-            )
-        )
-    );
-
-    testRowObject._status = _status;
-
-    $("#availableTests tbody").append(
-        $("<tr class='testRow'>")
-            .append(
-                $("<th scope='row'>").text(testRowObject["name"])
-            )
-            .append(
-                $("<th>").text(testRowObject._status.text)
-            )
-            .append(
-                $("<th>").text(testRowObject["openDatetime"] !== null ? testRowObject["openDatetime"] : "-")
-            )
-            .append(
-                $("<th>").text(testRowObject["closeDatetime"] !== null ? testRowObject["closeDatetime"] : "-")
-            )
-            .on('click', () => {
-                console.log(testRowObject["testId"]);
-                showTestInfo(testRowObject);
-            })
-    );
-}
-
-// Получает информацию о тесте и загружает информацию о нём на страничку.
-function showTestInfo(testRowObject) {
-    console.log(testRowObject);
-    $("#selectedTestInfo div").remove();
-    $("#selectedTestInfo").append(
-        $("<div class=\"container border border-dark mb-2 col-xl-8 col-md-12\">")
-            .append(
-                $("<h1 class=\"text-center\">").text(testRowObject["name"])
-            )
-            .append(
-                $("<div class=\"container border border-dark col-10\">")
-                    .append(
-                        $("<div class=\"row\">")
-                            .append(
-                                $("<p>").html(
-                                    'Статус: <b>' + testRowObject._status.text + '</b>'
-                                )
-                            )
-                            .append(
-                                $("<p>").html(
-                                    'Тест был создан: <b>' + testRowObject["creationDatetime"] + '</b>'
-                                )
-                            )
-                            .append(
-                                $("<p>").html(
-                                    'Тест будет доступен для прохождения с: <b>' + (testRowObject["openDatetime"] !== null ? testRowObject["openDatetime"] : "-") + '</b>'
-                                )
-                            )
-                            .append(
-                                $("<p>").html(
-                                    'Тест будет доступен для прохождения по: <b>' + (testRowObject["closeDatetime"] !== null ? testRowObject["closeDatetime"] : "-") + '</b>'
-                                )
-                            )
-                            .append(
-                                $("<p>").html(
-                                    'Количество попыток сдачи: <b>' + (testRowObject["maxTries"] === "-1" ? "не ограничено" : testRowObject["maxTries"]) + '</b>'
-                                )
-                            )
-                    )
-            )
-            .append(
-                $("<h2 class=\"text-center\">").text("Ваши попытки")
-            )
-            .append(
-                generateTriesTable(testRowObject["testId"])
-            )
-            .append(
-                $("<h2 class=\"text-center mb-4\">").text("Действия")
-            )
-            .append(
-                $("<div class=\"container col-10 mb-3 text-center\">")
-                    .append(
-                        $("<button class=\"btn btn-primary\">").text("Начать новую попытку")
-                    )
-            )
+// Отправляет серверу запрос на начало новой попытки начать тест.
+async function startNewTry(testId){
+    let data = {form: {}};
+    data["form"]["action"] = "startNewTry";
+    data["form"]["testId"] = testId;
+    console.log(data);
+    return postAjax(
+        siteURL + '/tests.php',
+        data,
+        new ConnectException("Произошла ошибка при отправке запроса на начало новой попытки прохождения теста!")
     );
 }
 
@@ -375,8 +258,12 @@ async function asyncGetTriesTable(testId) {
     });
 }
 
-// Получает float в диапазоне [0,1]. Возвращает текст с emoji и процентами.
+// Получает string, содержащий float в диапазоне [0,1] или -1. Возвращает текст с emoji и процентами.
 function getScoreText(score) {
+    if (score === "-1"){
+        return scoreRanges.unknown;
+    }
+    score = parseFloat(score);
     let percent = score * 100;
     percent = Math.round(percent);
     for (let i = 0; i < scoreRanges.ranges.length; i++) {
@@ -416,7 +303,7 @@ function generateTriesTable(testId) {
                                     $("<td>").text(
                                         (testTry["finished"] === "1" ?
                                                 // Если тест был пройден:
-                                                getScoreText(parseFloat(testTry["score"]))
+                                                getScoreText(testTry["score"])
                                                 :
                                                 // Если тест ещё в прогрессе:
                                                 "-"
@@ -471,4 +358,14 @@ function generateTriesTable(testId) {
                 '</tr>')
         )
         .append(tbody)
+}
+
+function showModal(headerHTML, bodyHTML, footerHTML){
+    const modal = $("#defaultModal");
+
+    modal.find(".modal-header").html(headerHTML);
+    modal.find(".modal-body").html(bodyHTML);
+    modal.find(".modal-footer").html(footerHTML);
+
+    modal.modal('show');
 }

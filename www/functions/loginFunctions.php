@@ -33,6 +33,9 @@ function generateCode($length=10, $useLetters = true, $useNumbers = true, $useSp
 // Меняет исходный массив!
 function makeArrayValuesSafe(&$array){
     foreach(array_keys($array) as $key) {
+        if (!is_string($array[$key])){
+            continue;
+        }
         $array[$key] = htmlspecialchars($array[$key]);
     }
     return $array;

@@ -721,12 +721,12 @@
       <Definer>root@localhost</Definer>
     </view>
     <routine id="226" parent="2" name="AddNewAnswer">
-      <SourceTextLength>1048</SourceTextLength>
+      <SourceTextLength>1071</SourceTextLength>
       <Definer>root@localhost</Definer>
       <RoutineKind>procedure</RoutineKind>
     </routine>
     <routine id="227" parent="2" name="CanStartNewTry">
-      <SourceTextLength>879</SourceTextLength>
+      <SourceTextLength>1075</SourceTextLength>
       <Definer>root@localhost</Definer>
       <RoutineKind>function</RoutineKind>
     </routine>

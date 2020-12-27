@@ -56,6 +56,37 @@ if (isset($_POST["form"])){
             $message["success"] = true;
             break;
         }
+        case "startNewTry":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if (isset($_POST["form"]["testId"])){
+                    // Если необходимое значение передано
+                    $message["canStart"] = CanUserStartTest($db, $userStatus->userId, $_POST["form"]["testId"]);
+                    if ($message["canStart"]){
+                        $message["hasStarted"] = StartNewTestTry($db, $userStatus->userId, $_POST["form"]["testId"]);
+                        if (!$message["hasStarted"]){
+                            // Если произошла ошибка при начале теста.
+                            $message["error"] = true;
+                            $message["errorText"] = "Произошла ошибка при создании новой попытки прохождения теста.";
+                        }
+                    } else {
+                        // Если пользователь не может начать этот тест.
+                        $message["error"] = true;
+                        $message["errorText"] = "Пользователь не может начать данный тест.";
+                    }
+                } else {
+                    // Если необходимое значение не передано.
+                    $message["error"] = true;
+                    $message["errorText"] = "Не было передано одно из следующих значений: testId.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
         case "getTestQuestions":{
             if ($userStatus->logined) {
                 // Если пользователь авторизован:
@@ -64,6 +95,7 @@ if (isset($_POST["form"])){
                     // Проверяем, доступен ли этот тест пользователю:
                     if (IsTestAvailableForUser($db, $_POST["form"]["testId"], $userStatus->userId)){
                         if (IsTestStartedByUser($db, $_POST["form"]["testId"], $userStatus->userId)){
+                            $message["testInfo"] = GetTestInfo($db, $_POST["form"]["testId"]);
                             $message["questions"] = GetTestQuestions($db, $_POST["form"]["testId"]);
                             $message["answers"] = GetTestAnswers($db, $_POST["form"]["testId"]);
                         } else {
@@ -80,6 +112,30 @@ if (isset($_POST["form"])){
                     // Если необходимое значение не передано.
                     $message["error"] = true;
                     $message["errorText"] = "Не было передано одно из следующих значений: testId.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
+        case "sendAnswers":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if (isset($_POST["form"]["answers"]) && isset($_POST["form"]["testId"])){
+                    // Если необходимое значение передано
+                    foreach ($_POST["form"]["answers"] as $answer){
+                        makeArrayValuesSafe($answer);
+                        AddAnswer($db, $userStatus->userId, $_POST["form"]["testId"], $answer["questionId"], $answer["answer"]);
+                    }
+                    $message["ended"] = EndTest($db, $userStatus->userId, $_POST["form"]["testId"]);
+                    $message["added"] = true;
+                } else {
+                    // Если необходимое значение не передано.
+                    $message["error"] = true;
+                    $message["errorText"] = "Не было передано одно из следующих значений: answers, testId.";
                 }
             } else {
                 // Если пользователь не авторизован:
