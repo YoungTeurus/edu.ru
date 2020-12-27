@@ -329,6 +329,30 @@ function generateTriesTable(testId) {
                                                 :
                                                 // Если тест ещё в прогрессе:
                                                 $("<button class=\"btn btn-primary\">").data("try", testTry["try"]).text("Продолжить")
+                                                    .on('click', () => {
+                                                        const testUrl = siteURL + "/test.html?testId="+testId;
+                                                        openUrlInNewTab(testUrl);
+                                                        // TODO: переделать так, чтобы вставлять сюда не весь код Modal-а
+                                                        showModal(
+                                                            "<h5 class=\"modal-title\">Продолжить тест</h5>\n" +
+                                                            "                    <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Закрыть\"></button>",
+                                                            "<div class=\"container text-center\">\n" +
+                                                            "                        <div class=\"row col-6 m-auto\">\n" +
+                                                            "                            <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewBox=\"0 -2 24 24\">\n" +
+                                                            "                                <g id=\"Lager_17\" data-name=\"Lager 17\" transform=\"translate(-4 -6)\">\n" +
+                                                            "                                    <path id=\"Path_19\" data-name=\"Path 19\" d=\"M22.091,16.681a1.97,1.97,0,0,0,.278-.732,1,1,0,0,0-.278-.679L16.574,9.538a2.116,2.116,0,0,1-.01-2.887l.028-.03a1.958,1.958,0,0,1,2.854-.008l8.267,8.613a1.077,1.077,0,0,1,.287.723,2.115,2.115,0,0,1-.287.775l-8.267,8.665a1.959,1.959,0,0,1-2.854-.012l-.028-.036a2.134,2.134,0,0,1,.01-2.9Z\" fill=\"#040505\"/>\n" +
+                                                            "                                    <path id=\"Path_20\" data-name=\"Path 20\" d=\"M10.091,16.681a1.97,1.97,0,0,0,.278-.732,1,1,0,0,0-.278-.679L4.574,9.538a2.116,2.116,0,0,1-.01-2.887l.028-.03a1.958,1.958,0,0,1,2.854-.008l8.267,8.613a1.077,1.077,0,0,1,.287.723,2.115,2.115,0,0,1-.287.775L7.446,25.389a1.959,1.959,0,0,1-2.854-.012l-.028-.036a2.134,2.134,0,0,1,.01-2.9Z\" fill=\"#040505\"/>\n" +
+                                                            "                                </g>\n" +
+                                                            "                            </svg>\n" +
+                                                            "                        </div>\n" +
+                                                            "                        <div class=\"row\">\n" +
+                                                            "                            <p>Страница для продолжения теста открыта.</p>\n" +
+                                                            "                            <p>Если вы не были перенаправлены на страницу с тестом, нажмите <a class=\"link-primary\" href=\"" + testUrl +"\">сюда</a>.</p>\n" +
+                                                            "                        </div>\n" +
+                                                            "                    </div>",
+                                                            ""
+                                                        );
+                                                    })
                                         )
                                     )
                                 )
@@ -368,4 +392,31 @@ function showModal(headerHTML, bodyHTML, footerHTML){
     modal.find(".modal-footer").html(footerHTML);
 
     modal.modal('show');
+}
+
+function showErrorModal(errorText){
+    showModal(
+        "<h5 class=\"modal-title\">Что-то пошло не так</h5>",
+        "<div class=\"container text-center\">\n" +
+        "                        <div class=\"row col-6 m-auto\">\n" +
+        "                            <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewBox=\"0 0 72 72\" id=\"emoji\">\n" +
+        "                                <g id=\"color\">\n" +
+        "                                    <path fill=\"#ea5a47\" d=\"m58.14 21.78-7.76-8.013-14.29 14.22-14.22-14.22-8.013 8.013 14.36 14.22-14.36 14.22 8.014 8.013 14.22-14.22 14.29 14.22 7.76-8.013-14.22-14.22z\"/>\n" +
+        "                                </g>\n" +
+        "                                <g id=\"hair\"/>\n" +
+        "                                <g id=\"skin\"/>\n" +
+        "                                <g id=\"skin-shadow\"/>\n" +
+        "                                <g id=\"line\">\n" +
+        "                                    <path fill=\"none\" stroke=\"#000\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"10\" stroke-width=\"2\" d=\"m58.14 21.78-7.76-8.013-14.29 14.22-14.22-14.22-8.013 8.013 14.35 14.22-14.35 14.22 8.014 8.013 14.22-14.22 14.29 14.22 7.76-8.013-14.22-14.22z\"/>\n" +
+        "                                </g>\n" +
+        "                            </svg>\n" +
+        "                        </div>\n" +
+        "                        <div class=\"row\">\n" +
+        "                            <p class='text-danger'>Произошла ошибка:</p>\n" +
+        "                            <p>" + errorText +"</p>\n" +
+        "                            <p>Повторите попытку или обратитесь в службу поддержки.</p>\n" +
+        "                        </div>\n" +
+        "                    </div>",
+        ""
+    );
 }

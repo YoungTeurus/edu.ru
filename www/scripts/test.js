@@ -36,58 +36,48 @@ function doAfterCheckingLoginStatus(logined) {
                     );
                     $("#testContent")[0].classList.remove('hidden');
                     $("#sendAnswers").on('click',
-                        () => {
+                        e => {
+                            e.preventDefault();
+                            // Показываем спиннер:
+                            const spinner = $("#sendAnswers .spinner");
+                            spinner[0].classList.remove('hidden');
                             sendAnswers().then(
                                 msg => {
                                     console.log(msg);
-                                    if(msg["added"]){
-                                        // Если всё успешно...
-                                        showModal(
-                                            "<h5 class=\"modal-title\">Тест завершён</h5>",
-                                            "<div class=\"container text-center\">\n" +
-                                            "                        <div class=\"row col-6 m-auto\">\n" +
-                                            "                            <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"Layer_1\"style=\"enable-background:new 0 0 512 512;\" version=\"1.1\" viewBox=\"0 0 512 512\"xml:space=\"preserve\"><style type=\"text/css\">.st0 {fill: #41AD49;}</style><g><polygon class=\"st0\" points=\"434.8,49 174.2,309.7 76.8,212.3 0,289.2 174.1,463.3 196.6,440.9 196.6,440.9 511.7,125.8 434.8,49     \"/></g></svg>\n" +
-                                            "                        </div>\n" +
-                                            "                        <div class=\"row\">\n" +
-                                            "                            <p>Тест был успешно завершён!</p>\n" +
-                                            "                            <p>Вы можете закрыть эту страницу, или она сама закроется через 3 секунды.</p>\n" +
-                                            "                        </div>\n" +
-                                            "                    </div>",
-                                            ""
-                                        );
-                                        setTimeout(() => {
-                                            window.close();
-                                        }, 3000)
+                                    // Скрываем спиннер:
+                                    spinner[0].classList.add('hidden');
+                                    if(msg["success"]){
+                                        if(!msg["error"]){
+                                            if(msg["added"]){
+                                                // Если всё успешно...
+                                                showModal(
+                                                    "<h5 class=\"modal-title\">Тест завершён</h5>",
+                                                    "<div class=\"container text-center\">\n" +
+                                                    "                        <div class=\"row col-6 m-auto\">\n" +
+                                                    "                            <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"Layer_1\"style=\"enable-background:new 0 0 512 512;\" version=\"1.1\" viewBox=\"0 0 512 512\"xml:space=\"preserve\"><style type=\"text/css\">.st0 {fill: #41AD49;}</style><g><polygon class=\"st0\" points=\"434.8,49 174.2,309.7 76.8,212.3 0,289.2 174.1,463.3 196.6,440.9 196.6,440.9 511.7,125.8 434.8,49     \"/></g></svg>\n" +
+                                                    "                        </div>\n" +
+                                                    "                        <div class=\"row\">\n" +
+                                                    "                            <p>Тест был успешно завершён!</p>\n" +
+                                                    "                            <p>Вы можете закрыть эту страницу, или она сама закроется через 3 секунды.</p>\n" +
+                                                    "                        </div>\n" +
+                                                    "                    </div>",
+                                                    ""
+                                                );
+                                                setTimeout(() => {
+                                                    window.close();
+                                                }, 3000)
+                                            }
+                                        } else {
+                                            // Если произошла ошибка:
+                                            showErrorModal(msg["errorText"]);
+                                        }
                                     }
                                 }
                             );
                         }
                     );
                 } else {
-                    showModal(
-                        "<h5 class=\"modal-title\">Что-то пошло не так</h5>",
-                        "<div class=\"container text-center\">\n" +
-                        "                        <div class=\"row col-6 m-auto\">\n" +
-                        "                            <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewBox=\"0 0 72 72\" id=\"emoji\">\n" +
-                        "                                <g id=\"color\">\n" +
-                        "                                    <path fill=\"#ea5a47\" d=\"m58.14 21.78-7.76-8.013-14.29 14.22-14.22-14.22-8.013 8.013 14.36 14.22-14.36 14.22 8.014 8.013 14.22-14.22 14.29 14.22 7.76-8.013-14.22-14.22z\"/>\n" +
-                        "                                </g>\n" +
-                        "                                <g id=\"hair\"/>\n" +
-                        "                                <g id=\"skin\"/>\n" +
-                        "                                <g id=\"skin-shadow\"/>\n" +
-                        "                                <g id=\"line\">\n" +
-                        "                                    <path fill=\"none\" stroke=\"#000\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-miterlimit=\"10\" stroke-width=\"2\" d=\"m58.14 21.78-7.76-8.013-14.29 14.22-14.22-14.22-8.013 8.013 14.35 14.22-14.35 14.22 8.014 8.013 14.22-14.22 14.29 14.22 7.76-8.013-14.22-14.22z\"/>\n" +
-                        "                                </g>\n" +
-                        "                            </svg>\n" +
-                        "                        </div>\n" +
-                        "                        <div class=\"row\">\n" +
-                        "                            <p class='text-danger'>Произошла ошибка:</p>\n" +
-                        "                            <p>" + msg["errorText"] +"</p>\n" +
-                        "                            <p>Повторите попытку или обратитесь в службу поддержки.</p>\n" +
-                        "                        </div>\n" +
-                        "                    </div>",
-                        ""
-                    );
+                    showErrorModal(msg["errorText"]);
                 }
             } else {
 

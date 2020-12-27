@@ -73,6 +73,11 @@ function appendNewAvailableTest(testRowObject) {
     );
 }
 
+// Открывает указанный сайт в новой вкладке
+function openUrlInNewTab(url){
+    window.open(url, "_blank");
+}
+
 // Получает информацию о тесте и загружает информацию о нём на страничку.
 function showTestInfo(testRowObject) {
     console.log(testRowObject);
@@ -138,7 +143,8 @@ function showTestInfo(testRowObject) {
                                 .append(
                                     $("<span>").text("Начать новую попытку")
                                 )
-                                .on('click', () => {
+                                .on('click', e => {
+                                    e.preventDefault();
                                     // TODO: код начала теста
                                     // Показываем спиннер:
                                     spinner[0].classList.remove('hidden');
@@ -151,9 +157,9 @@ function showTestInfo(testRowObject) {
                                                 if (msg["success"]){
                                                     if (!msg["error"]){
                                                         if (msg["hasStarted"]){
-                                                            const testUrl = siteURL + "/test.html?testId="+testRowObject["testId"];
                                                             // Если начали тест:
-                                                            window.open(testUrl, "_blank");
+                                                            const testUrl = siteURL + "/test.html?testId="+testRowObject["testId"];
+                                                            openUrlInNewTab(testUrl);
                                                             // TODO: переделать так, чтобы вставлять сюда не весь код Modal-а
                                                             showModal(
                                                                 "<h5 class=\"modal-title\">Тест успешно начат</h5>\n" +
