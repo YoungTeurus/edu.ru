@@ -317,3 +317,23 @@ function showErrorModal(errorText){
 function openUrlInNewTab(url) {
     window.open(url, "_blank");
 }
+
+// Возвращает либо строковое представление переданного объекта, либо "-", если передано null
+function getStringOrDash(obj){
+    return obj !== null ? obj.toString() : "-"
+}
+
+// Заменяет (или дополняет) option-ы select-а
+// optionsArray содержит массив объектов типа selectOption (см. выше)
+function setSelectOptions(selectSelector, optionsArray, append = false) {
+    const select = $(selectSelector);
+    if (!append) {
+        select.find("option").remove();
+    }
+    optionsArray.forEach(option => {
+        const tempOption = $("<option>");
+        tempOption.val(option.value);
+        tempOption.text(option.text);
+        select.append(tempOption);
+    });
+}

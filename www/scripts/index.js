@@ -1,3 +1,9 @@
+// Фабрика объекто типа selectOption
+const getSelectOption = (text, value) => ({
+    text: text,
+    value: value,
+})
+
 // Очищает таблицу доступных тестов
 // TODO: вынести функционал в отдельную функцию с параметром?
 function clearAvailableTests() {
@@ -60,10 +66,10 @@ function appendNewAvailableTest(testRowObject) {
                 $("<td>").text(testRowObject._status.text)
             )
             .append(
-                $("<td>").text(testRowObject["openDatetime"] !== null ? testRowObject["openDatetime"] : "-")
+                $("<td>").text(getStringOrDash(testRowObject["openDatetime"]))
             )
             .append(
-                $("<td>").text(testRowObject["closeDatetime"] !== null ? testRowObject["closeDatetime"] : "-")
+                $("<td>").text(getStringOrDash(testRowObject["closeDatetime"]))
             )
             .on('click', () => {
                 console.log(testRowObject["testId"]);
@@ -385,22 +391,19 @@ function appendTestToEditTestsTable(editTestRowObject) {
                 $("<th scope='row'>").text(editTestRowObject["name"])
             )
             .append(
-                $("<td>").text(editTestRowObject["creationDatetime"])
+                $("<td>").text(getStringOrDash(editTestRowObject["creationDatetime"]))
             )
             .append(
-                $("<td>").text(editTestRowObject["openDatetime"])
+                $("<td>").text(getStringOrDash(editTestRowObject["openDatetime"]))
             )
             .append(
-                $("<td>").text(editTestRowObject["closeDatetime"])
+                $("<td>").text(getStringOrDash(editTestRowObject["closeDatetime"]))
             )
             .append(
                 $("<td>")
                     .append(
                         $("<button class=\"btn btn-primary\">")
-                            .on('click', () => {
-                                console.log('Edit groups of testId: ', editTestRowObject["id"]);
-                                // TODO: Код для кнопки редактирования групп
-                            })
+                            .on('click', () => editStudentsGroupsOfTest(editTestRowObject))
                             .text("Редактировать")
                     )
             )
@@ -416,29 +419,111 @@ function appendTestToEditTestsTable(editTestRowObject) {
                     )
             )
             .append(
-                $("<td>").append("<div class=\"container text-center\">").append(
-                    $("<div class=\"row mb-1\">").append(
-                        $("<div>")
-                            .append(
-                                $("<button class=\"btn btn-primary\">")
-                                    .on('click', () => {
-                                        console.log('Edit whole testId: ', editTestRowObject["id"]);
-                                        // TODO: Код для кнопки редактирования вопросов
-                                    })
-                                    .text("Редактировать")
+                $("<td>").append(
+                    $("<div class=\"container text-center\">")
+                        .append(
+                            $("<div class=\"row mb-1\">").append(
+                                $("<div>")
+                                    .append(
+                                        $("<button class=\"btn btn-primary\">")
+                                            .on('click', () => {
+                                                console.log('Edit whole testId: ', editTestRowObject["id"]);
+                                                // TODO: Код для кнопки редактирования теста
+                                            })
+                                            .text("Редактировать")
+                                    )
                             )
-                            .append(
-                                $("<button class=\"btn btn-danger\">")
-                                    .on('click', () => {
-                                        console.log('Delete testId: ', editTestRowObject["id"]);
-                                        // TODO: Код для кнопки редактирования вопросов
-                                    })
-                                    .text("Удалить")
+                        )
+                        .append(
+                            $("<div class=\"row mb-1\">").append(
+                                $("<div>")
+                                    .append(
+                                        $("<button class=\"btn btn-danger\">")
+                                            .on('click', () => {
+                                                console.log('Delete testId: ', editTestRowObject["id"]);
+                                                // TODO: Код для кнопки удаления теста
+                                            })
+                                            .text("Удалить")
+                                    )
                             )
-                    )
+                        )
                 )
             )
     );
+
+    function editStudentsGroupsOfTest(editTestRowObject) {
+        console.log('Edit groups of testId: ', editTestRowObject["id"]);
+        // Код для кнопки редактирования групп
+        getTestStudentsGroups(editTestRowObject["id"]).then(msg => {
+            console.log(msg);
+            // TODO: дополнить
+            if (msg["success"]) {
+                if (!msg["error"]) {
+                    const optionsArray = Array();
+                    msg["allStudentsGroups"].forEach(studentsGroup => {
+                        optionsArray.push(getSelectOption(studentsGroup["name"], studentsGroup["id"]));
+                    });
+                    setupGroupsAvailability(editTestRowObject["name"], optionsArray);
+                    msg["testStudentsGroups"].forEach(studentGroup => appendGroupToGroupsAvailabilityTable(studentGroup));
+                }
+            }
+        }).catch(e => console.log(e));
+    }
+}
+
+// Возвращает информацию о студенческих группах, для которых открыто прохождение теста
+// Также возвращает список всех групп
+function getTestStudentsGroups(testId) {
+    let data = {form: {}};
+    data["form"]["action"] = "getTestStudentsGroups";
+    data["form"]["testId"] = testId;
+    console.log(data);
+    return postAjax(
+        siteURL + '/tests.php',
+        data,
+        new ConnectException("Произошла ошибка при отправке запроса на получение информации о группах, для которых открыто прохождение теста!")
+    );
+}
+
+// Настраивает groupsAvailabilityPlaceholder
+// optionsArray содержит массив объектов типа selectOption (см. выше)
+//  - Изменяет название блока
+//  - Заменяет option-ы select-а
+//  - Очищает содержимое таблицы groupsAvailabilityTable
+function setupGroupsAvailability(testName, optionsArray) {
+    $("#editGroupsAvailabilityTestName").text(testName);
+    setSelectOptions("#editGroupsGroupName", optionsArray);
+    clearGroupsAvailabilityTable();
+}
+
+// Очищает содержимое таблицы groupsAvailabilityTable
+// TODO: вынести функционал в отдельную функцию с параметром?
+function clearGroupsAvailabilityTable() {
+    $("#groupsAvailabilityTable tbody tr").remove();
+}
+
+// Добавляет группу в таблицу групп для редактирования
+function appendGroupToGroupsAvailabilityTable(groupRowObject) {
+    $("#groupsAvailabilityTable tbody").append(
+        $("<tr>").append(
+            $("<th scope=\"row\">").text(groupRowObject["name"])
+        ).append(
+            $("<td>").append(
+                $("<div class=\"container text-center\">").append(
+                    $("<div class=\"row mb-1\">").append(
+                        $("<div>").append(
+                            $("<button class=\"btn btn-danger\">")
+                                .on('click', () => {
+                                    // TODO: Код для удаления группы.
+                                    console.log('Delete group: ', groupRowObject["id"]);
+                                })
+                                .text("Удалить")
+                        )
+                    )
+                )
+            )
+        )
+    )
 }
 
 $(() => {
@@ -544,12 +629,12 @@ $(() => {
     });
     $('#editTests').on('click', e => {
         e.preventDefault();
+        clearEditTestsTable();
         getAllTests().then(
             msg => {
                 console.log(msg);
-                if(msg["success"]){
-                    if(!msg["error"]){
-                        clearEditTestsTable();
+                if (msg["success"]) {
+                    if (!msg["error"]) {
                         msg["tests"].forEach(
                             test => appendTestToEditTestsTable(test)
                         );

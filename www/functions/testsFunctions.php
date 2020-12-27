@@ -241,7 +241,7 @@ function IfUserCanEditTests($db, $userId){
     return $returnVar;
 }
 
-// Возвращает массив, содержащий все тестыЫ
+// Возвращает массив, содержащий все тесты
 function GetAllTests($db){
     $returnArray = array();
     // Возвращает id пользователя, ник пользователя и дату окончания "сессии" для пользователя с заданным хешем входа и IP-адресом:
@@ -250,6 +250,38 @@ function GetAllTests($db){
     if ($getAllTests->execute()) {
         if ($getAllTests->rowCount() > 0) {
             $returnArray = $getAllTests->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
+
+    return $returnArray;
+}
+
+// Возвращает массив, содержащий все студенческие группы
+function GetAllStudentsGroups($db){
+    $returnArray = array();
+    $getAllStudentsGroups = $db->prepare("SELECT id, name FROM studentsgroups;");
+
+    if ($getAllStudentsGroups->execute()) {
+        if ($getAllStudentsGroups->rowCount() > 0) {
+            $returnArray = $getAllStudentsGroups->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
+
+    return $returnArray;
+}
+
+// Возвращает массив студенческих групп, которым разрешено прохождение теста
+function GetTestStudentsGroups($db, $testId){
+    $returnArray = array();
+    $getTestStudentsGroups = $db->prepare("SELECT id, name
+                                        FROM studentsgroups JOIN testsstudentsgroups t on studentsgroups.id = t.studentgroupId and testId = :testId;");
+    $getTestStudentsGroups->bindParam(':testId', $_testId);
+
+    $_testId = $testId;
+
+    if ($getTestStudentsGroups->execute()) {
+        if ($getTestStudentsGroups->rowCount() > 0) {
+            $returnArray = $getTestStudentsGroups->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 
