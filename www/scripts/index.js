@@ -463,7 +463,7 @@ function appendTestToEditTestsTable(editTestRowObject) {
                     msg["allStudentsGroups"].forEach(studentsGroup => {
                         optionsArray.push(getSelectOption(studentsGroup["name"], studentsGroup["id"]));
                     });
-                    setupGroupsAvailability(editTestRowObject["name"], optionsArray);
+                    setupGroupsAvailability(editTestRowObject["id"], editTestRowObject["name"], optionsArray);
                     msg["testStudentsGroups"].forEach(studentGroup => appendGroupToGroupsAvailabilityTable(studentGroup));
                 }
             }
@@ -489,10 +489,12 @@ function getTestStudentsGroups(testId) {
 // optionsArray содержит массив объектов типа selectOption (см. выше)
 //  - Изменяет название блока
 //  - Заменяет option-ы select-а
+//  - Добавляет data для кнопки добавления группы
 //  - Очищает содержимое таблицы groupsAvailabilityTable
-function setupGroupsAvailability(testName, optionsArray) {
+function setupGroupsAvailability(testId, testName, optionsArray) {
     $("#editGroupsAvailabilityTestName").text(testName);
     setSelectOptions("#editGroupsGroupName", optionsArray);
+    $('#addStudentsGroupToTest').data('testId', testId)
     clearGroupsAvailabilityTable();
 }
 
@@ -500,6 +502,20 @@ function setupGroupsAvailability(testName, optionsArray) {
 // TODO: вынести функционал в отдельную функцию с параметром?
 function clearGroupsAvailabilityTable() {
     $("#groupsAvailabilityTable tbody tr").remove();
+}
+
+// Добавляет группу к тесту, обновляя список групп, которым доступно выполнение теста
+function addStudentGroupToTest(testId, groupId){
+    let data = {form: {}};
+    data["form"]["action"] = "addStudentsGroupToTest";
+    data["form"]["testId"] = testId;
+    data["form"]["groupId"] = groupId;
+    console.log(data);
+    return postAjax(
+        siteURL + '/tests.php',
+        data,
+        new ConnectException("Произошла ошибка при отправке запроса на добавление студенческой группы к тесту!")
+    );
 }
 
 // Добавляет группу в таблицу групп для редактирования
@@ -645,6 +661,19 @@ $(() => {
     });
     $('#checkTests').on('click', e => {
         e.preventDefault();
+    });
+    $('#addStudentsGroupToTest').on('click', e =>{
+        e.preventDefault();
+        const _this = $('#addStudentsGroupToTest');
+        if (_this.data('testId') === undefined){
+            // Если данные не заданы, значит тест для изменения группы ещё не был выбран.
+            // Данные для данной кнопки задаются внутри f setupGroupsAvailability.
+            return;
+        }
+        addStudentGroupToTest(_this.data('testId'),$("#editGroupsGroupName").val())
+            .then( msg => {
+                console.log(msg);
+            }).catch(e => console.log(e));
     });
 
     checkUserLoginStatus()

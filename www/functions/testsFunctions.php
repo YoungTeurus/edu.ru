@@ -288,4 +288,19 @@ function GetTestStudentsGroups($db, $testId){
     return $returnArray;
 }
 
+// Добавляет студенческую группу к тесту, разрешая студентам из этой группы проходить данный тест
+function AddStudentsGroupToTest($db, $testId, $groupId){
+    $addStudentsGroupToTest = $db->prepare("CALL AddStudentsGroupToTest(:testId, :studentsgroupId);");
+    $addStudentsGroupToTest->bindParam(':testId', $_testId);
+    $addStudentsGroupToTest->bindParam(':studentsgroupId', $_groupId);
+
+    $_testId = $testId;
+    $_groupId = $groupId;
+
+    if ($addStudentsGroupToTest->execute()) {
+        return true;
+    }
+
+    return false;
+}
 ?>

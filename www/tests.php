@@ -83,6 +83,32 @@ if (isset($_POST["form"])){
             $message["success"] = true;
             break;
         }
+        case "addStudentsGroupToTest":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if (IfUserCanEditTests($db, $userStatus->userId)){
+                    // Если у пользователя достаточно полномочий:
+                    if (isset($_POST["form"]["testId"]) && isset($_POST["form"]["groupId"])){
+                        // Если необходимое значение передано
+                        $message["added"] = AddStudentsGroupToTest($db, $_POST["form"]["testId"], $_POST["form"]["groupId"]);
+                    } else {
+                        // Если необходимое значение не передано.
+                        $message["error"] = true;
+                        $message["errorText"] = "Не было передано одно из следующих значений: testId, groupId.";
+                    }
+                } else {
+                    // Если у пользователя недостаточно полномочий:
+                    $message["error"] = true;
+                    $message["errorText"] = "Пользователь не имеет прав на получение списка всех тестов.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
         case "getTestTries":{
             if ($userStatus->logined) {
                 // Если пользователь авторизован:
