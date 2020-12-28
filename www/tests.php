@@ -300,7 +300,7 @@ if (isset($_POST["form"])){
                             }
                             // Удаляем все ответы теста:
                             RemoveAllTestAnswers($db, $_POST["form"]["testId"]);
-                            // Загружаем новые ответы:
+                            // Загружаем новые ответы:в
                             foreach ($_POST["form"]["testData"]["answers"] as $answer){
                                 $updateError = $updateError || (!AddNewTestAnswer($db, $_POST["form"]["testId"], $answer["questionId"], $answer["answer"], $answer["correct"]));
                             }
