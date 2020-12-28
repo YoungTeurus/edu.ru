@@ -134,7 +134,7 @@ function GetTestQuestions($db, $testId)
     $returnArray = array();
     $getTestQuestions = $db->prepare("SELECT testquestions.id AS id, text, q.id AS questionTypeId, name AS questionTypeName, description AS questionTypeDescription, hasCorrectAnswer, hasVariants
                             FROM testquestions JOIN questiontypes q on q.id = testquestions.questionType
-                            WHERE testId = :testId;");
+                            WHERE testId = :testId ORDER BY id;");
     $getTestQuestions->bindParam(':testId', $_testId);
 
     $_testId = $testId;
@@ -326,6 +326,7 @@ function AddStudentsGroupToTest($db, $testId, $groupId){
     return false;
 }
 
+// Удаляет студенческую группу из тесту, запрещая студентам из этой группы проходить данный тест
 function RemoveStudentsGroupFromTest($db, $testId, $groupId){
     $addStudentsGroupToTest = $db->prepare("CALL RemoveStudentsGroupFromTest(:testId, :studentsgroupId);");
     $addStudentsGroupToTest->bindParam(':testId', $_testId);

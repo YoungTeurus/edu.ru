@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Много чего доделано, много чего впереди. Идёт актинвная работа над редактированием вопросов.&#10;Перед изменением appendQuestionToEditTestQuestionsTable.">
+    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Форма отправки ответов и вопросов работает. Криво: не реагирует на изменение типа вопроса.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/functions/loginFunctions.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/functions/loginFunctions.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/functions/testsFunctions.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/functions/testsFunctions.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/scripts/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/tests.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/tests.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +42,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="TODO_SCOPE" value="All Places" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.data.extractors.current.export.id" value="SQL-Insert-Multirow.sql.groovy" />
     <property name="javascript.nodejs.core.library.configured.version" value="12.19.0" />
@@ -76,7 +75,7 @@
       <updated>1608842862654</updated>
       <workItem from="1608842864090" duration="7341000" />
       <workItem from="1608892020731" duration="44380000" />
-      <workItem from="1608988579707" duration="89026000" />
+      <workItem from="1608988579707" duration="84486000" />
     </task>
     <task id="LOCAL-00001" summary="Таблица тестов и информации о тестов автоматически подгружаются после логина.">
       <created>1609013504322</created>
@@ -162,14 +161,7 @@
       <option name="project" value="LOCAL" />
       <updated>1609095252529</updated>
     </task>
-    <task id="LOCAL-00013" summary="Много чего доделано, много чего впереди. Идёт актинвная работа над редактированием вопросов.&#10;Перед изменением appendQuestionToEditTestQuestionsTable.">
-      <created>1609107848547</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1609107848547</updated>
-    </task>
-    <option name="localTasksCounter" value="14" />
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -200,8 +192,7 @@
     <MESSAGE value="Рабочая кнопка &quot;Редактировать&quot; доступность группам." />
     <MESSAGE value="Рабочая кнопка &quot;Добавить&quot; группу." />
     <MESSAGE value="Таблица с ответами. Только заполняется, не отправляется." />
-    <MESSAGE value="Много чего доделано, много чего впереди. Идёт актинвная работа над редактированием вопросов.&#10;Перед изменением appendQuestionToEditTestQuestionsTable." />
-    <option name="LAST_COMMIT_MESSAGE" value="Много чего доделано, много чего впереди. Идёт актинвная работа над редактированием вопросов.&#10;Перед изменением appendQuestionToEditTestQuestionsTable." />
+    <option name="LAST_COMMIT_MESSAGE" value="Таблица с ответами. Только заполняется, не отправляется." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

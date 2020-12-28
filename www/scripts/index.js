@@ -72,9 +72,9 @@ function appendNewAvailableTest(testRowObject) {
                 $("<td>").text(getStringOrDash(testRowObject["closeDatetime"]))
             )
             .off('click').on('click', () => {
-                console.log(testRowObject["testId"]);
-                showTestInfo(testRowObject);
-            })
+            console.log(testRowObject["testId"]);
+            showTestInfo(testRowObject);
+        })
     );
 }
 
@@ -813,7 +813,7 @@ function setupAnswers(testId, questionsArray, answersArray, questionTypes) {
 
 // Отправляет на сервер обновлённый (или созданный) тест
 // testData - объект, состоящий из массивов answers, questions и двух переменных: canUpdate и wasChanged
-function sendEditedTest(testId, testData){
+function sendEditedTest(testId, testData) {
     let data = {form: {}};
     data["form"]["action"] = "sendEditedTest";
     data["form"]["testId"] = testId;
@@ -851,16 +851,16 @@ function clearEditQuestionAnswersTable() {
 
 // Добавляет в таблицу editQuestionAnswersTable новую заполненную строку
 function appendQuestionInEditQuestionAnswersTable(testId, question, answersArray, questionTypes, updateQuestionFunc, updateAnswerFunc) {
-    let answersTable = $("<span>").text("-");
-    if (question["hasCorrectAnswer"] === "1") {
-        answersTable = $("<table class=\"table border border-dark\">")
-            .append(
-                $("<thead>").html(
-                    "<th>Ответ</th>" +
-                    "<th>Правильный?</th>" +
-                    "<th></th>"
-                )
+    let answersTable = $("<table class=\"table border border-dark\">")
+        .append(
+            $("<thead>").html(
+                "<th>Ответ</th>" +
+                "<th>Правильный?</th>" +
+                "<th></th>"
             )
+        );
+    if (question["hasCorrectAnswer"] === "1") {
+        // Заполнение таблицы ответов переданными значениями
         answersArray.forEach(
             answ => addAnswerToTableInQuestion(answersTable, answ)
         );
@@ -937,32 +937,59 @@ function appendQuestionInEditQuestionAnswersTable(testId, question, answersArray
                             // При изменении типа вопроса
                             tRow.data('questionType', $(this).val());
                             updateQuestionFunc(question["id"], null, $(this).val());
+
+                            let doesCurrentQuestionTypeHasCorrectAnswer = true;
+                            doesCurrentQuestionTypeHasCorrectAnswer = (questionTypes.filter(qt => {
+                                return qt["id"] === $(this).val();
+                            })[0]["hasCorrectAnswer"] === "1");
+                            if (doesCurrentQuestionTypeHasCorrectAnswer) {
+                                console.log('Showing table!');
+                                answersTable.parent().removeClass('hidden');
+                            } else {
+                                answersTable.parent().addClass('hidden');
+                                console.log('Hiding table, deleting answers!');
+                                // Удаляем все вопросы, которые связаны с question["id"]:
+                                answersTable.find("tr").remove();
+                                const tBody = $("#editQuestionAnswersTable tbody");
+                                tBody.data('answers',
+                                    tBody.data('answers').filter(
+                                        answ => {
+                                            return answ["questionId"] !== question["id"];
+                                        }
+                                    )
+                                );
+                                tBody.data('wasChanged', true);
+                                tBody.data('canUpdate', false);
+                            }
                         })
                 )
             )
             .append(
-                $("<td>").append(
-                    answersTable
-                        .data('answers', answersArray)
-                ).append(
-                    (question["hasCorrectAnswer"] === "1" ?
-                        $("<button class='btn btn-outline-secondary'>")
-                            .text("Добавить ответ")
-                            .on('click', e => {
-                                console.log('Add answer to qId:', question["id"]);
-                                // TODO: добавление нового ответа
-                                let tempAnswer = {
-                                    answer: "",
-                                    answerId: null,
-                                    correct: "0",
-                                    questionId: question["id"],
-                                }
-                                updateAnswerFunc(null, null, null, false, true, tempAnswer);
-                                addAnswerToTableInQuestion(answersTable, tempAnswer);
-                            })
-                        :
-                        null)
-                )
+                $("<td>")
+                    .append(
+                        $("<div>")
+                            .append(
+                                answersTable
+                                    .data('answers', answersArray)
+                            )
+                            .append(
+                                $("<button class='btn btn-outline-secondary'>")
+                                    .text("Добавить ответ")
+                                    .on('click', e => {
+                                            console.log('Add answer to qId:', question["id"]);
+                                            // TODO: добавление нового ответа
+                                            let tempAnswer = {
+                                                answer: "",
+                                                answerId: null,
+                                                correct: "0",
+                                                questionId: question["id"],
+                                            }
+                                            updateAnswerFunc(null, null, null, false, true, tempAnswer);
+                                            addAnswerToTableInQuestion(answersTable, tempAnswer);
+                                        }
+                                    )
+                            )
+                    )
             )
             .append(
                 $("<td>").append($("<div class=\"container text-center\">").append(
@@ -981,6 +1008,10 @@ function appendQuestionInEditQuestionAnswersTable(testId, question, answersArray
             .data('questionText', question["text"])
             .data('questionType', question["questionTypeId"])
     );
+
+    if (question["hasCorrectAnswer"] !== "1"){
+        answersTable.parent().addClass('hidden');
+    }
 }
 
 $(() => {
