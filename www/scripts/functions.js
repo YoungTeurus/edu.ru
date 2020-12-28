@@ -323,17 +323,28 @@ function getStringOrDash(obj){
     return obj !== null ? obj.toString() : "-"
 }
 
+// Фабрика объектов типа selectOption
+const getSelectOption = (text, value) => ({
+    text: text,
+    value: value,
+})
+
 // Заменяет (или дополняет) option-ы select-а
 // optionsArray содержит массив объектов типа selectOption (см. выше)
-function setSelectOptions(selectSelector, optionsArray, append = false) {
-    const select = $(selectSelector);
+function setSelectOptionsBySelector(selectSelector, optionsArray, append = false) {
+    setSelectOptions($(selectSelector), optionsArray, append);
+}
+
+// Заменяет (или дополняет) option-ы select-а
+// optionsArray содержит массив объектов типа selectOption (см. выше)
+function setSelectOptions(jQueryObject, optionsArray, append = false){
     if (!append) {
-        select.find("option").remove();
+        jQueryObject.find("option").remove();
     }
     optionsArray.forEach(option => {
         const tempOption = $("<option>");
         tempOption.val(option.value);
         tempOption.text(option.text);
-        select.append(tempOption);
+        jQueryObject.append(tempOption);
     });
 }

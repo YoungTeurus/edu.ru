@@ -7,6 +7,7 @@
     <script src="scripts/jquery-3.4.1.min.js"></script>
     <script src="scripts/functions.js"></script>
     <script src="scripts/index.js"></script>
+    <script src="scripts/index2.js"></script>
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/index.css">
 </head>
@@ -219,82 +220,97 @@
                     <button id="editTests" class="btn btn-outline-primary">Редактировать тесты</button>
                 </div>
                 <div class="mb-1 hidden">
-                    <button id="checkTests" class="btn btn-outline-primary">Просмотреть ответы</button>
+                    <button id="getResults" class="btn btn-outline-primary">Просмотреть отчёт</button>
+                </div>
+                <div class="mb-1 hidden">
+                    <button id="checkTests" class="btn btn-outline-primary">
+                        <span class="spinner spinner-border spinner-border-sm hidden" role="status"
+                              aria-hidden="true"></span>
+                        Проверить тесты</button>
                 </div>
             </div>
         </div>
-        <div id="editTestsPlaceholder" class="border border-dark">
+        <div id="editTestsPlaceholder" class="border border-dark hidden mb-1">
             <!-- TODO: сортировка тестов -->
-            <table id="editTestsTable" class="table table-hover border border-dark hidden">
-                <thead>
-                <tr>
-                    <th scope="col">Название теста</th>
-                    <th scope="col">Дата создания</th>
-                    <th scope="col">Дата открытия</th>
-                    <th scope="col">Дата закрытия</th>
-                    <th scope="col">Закрыт</th>
-                    <th scope="col">Доступность группам</th>
-                    <th scope="col">Вопросы</th>
-                    <th scope="col">Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- Загружается динамически. См. f appendTestToEditTestsTable()
-                <tr>
-                    <th scope="row">Тест 1</th>
-                    <td>2020-12-31 00:00:00</td>
-                    <td>2020-12-31 00:00:00</td>
-                    <td>2020-12-31 00:00:00</td>
-                    <td>
-                        <button class="btn btn-primary">Редактировать</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary">Редактировать</button>
-                    </td>
-                    <td>
-                        <div class="container text-center">
-                            <div class="row mb-1">
-                                <div>
-                                    <button class="btn btn-primary">Редактировать</button>
+            <div id="editTestsTableContainer" class="hidden">
+                <div class="row text-center">
+                    <div>
+                        <button id="createNewTest" class="btn btn-primary">Создать новый тест</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <table id="editTestsTable" class="table table-hover border border-dark">
+                        <thead>
+                        <tr>
+                            <th scope="col">Название теста</th>
+                            <th scope="col">Дата создания</th>
+                            <th scope="col">Дата открытия</th>
+                            <th scope="col">Дата закрытия</th>
+                            <th scope="col">Закрыт</th>
+                            <th scope="col">Доступность группам</th>
+                            <th scope="col">Вопросы</th>
+                            <th scope="col">Действия</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Загружается динамически. См. f appendTestToEditTestsTable()
+                        <tr>
+                            <th scope="row">Тест 1</th>
+                            <td>2020-12-31 00:00:00</td>
+                            <td>2020-12-31 00:00:00</td>
+                            <td>2020-12-31 00:00:00</td>
+                            <td>
+                                <button class="btn btn-primary">Редактировать</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary">Редактировать</button>
+                            </td>
+                            <td>
+                                <div class="container text-center">
+                                    <div class="row mb-1">
+                                        <div>
+                                            <button class="btn btn-primary">Редактировать</button>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div>
+                                            <button class="btn btn-danger">Удалить</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mb-1">
-                                <div>
-                                    <button class="btn btn-danger">Удалить</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Тест 2</th>
+                            <td>2020-12-31 00:00:00</td>
+                            <td>2020-12-31 00:00:00</td>
+                            <td>2020-12-31 00:00:00</td>
+                            <td>
+                                <button class="btn btn-primary">Редактировать</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary">Редактировать</button>
+                            </td>
+                            <td>
+                                <div class="container text-center">
+                                    <div class="row mb-1">
+                                        <div>
+                                            <button class="btn btn-primary">Редактировать</button>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div>
+                                            <button class="btn btn-danger">Удалить</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">Тест 2</th>
-                    <td>2020-12-31 00:00:00</td>
-                    <td>2020-12-31 00:00:00</td>
-                    <td>2020-12-31 00:00:00</td>
-                    <td>
-                        <button class="btn btn-primary">Редактировать</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary">Редактировать</button>
-                    </td>
-                    <td>
-                        <div class="container text-center">
-                            <div class="row mb-1">
-                                <div>
-                                    <button class="btn btn-primary">Редактировать</button>
-                                </div>
-                            </div>
-                            <div class="row mb-1">
-                                <div>
-                                    <button class="btn btn-danger">Удалить</button>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                -->
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                        -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div id="editGroupsAvailabilityPlaceholder" class="border border-dark m-1 hidden">
                 <div class="m-1">
                     <h5>Группы для теста "<span id="editGroupsAvailabilityTestName"></span>"</h5>
@@ -345,6 +361,46 @@
                         -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <div id="editTestPlaceholder" class="m-1 hidden">
+                <div class="container border border-dark align-content-center align-items-center">
+                    <div class="row col-lg-6 col-md-8 col-sm-11 m-auto">
+                        <h5>Редактирование теста "<span id="editTestTestName">Тест1</span>"</h5>
+                        <form id="editTestForm m-2">
+                            <div class="mb-3">
+                                <label for="editTestName" class="form-label">Название теста</label>
+                                <input id="editTestName" class="form-control" type="text" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editTestOpenDate">Дата открытия:</label>
+                                <input id="editTestOpenDate" type="datetime-local">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editTestCloseDate">Дата закрытия:</label>
+                                <input id="editTestCloseDate" type="datetime-local">
+                            </div>
+                            <div>
+                                <div class="mb-3">
+                                    <label for="editTestTriesCount">Количество попыток:</label>
+                                    <input id="editTestTriesCount" type="number" min="-1" max="1000" value="1">
+                                    <div class="form-text">Установите равным "-1", чтобы не ограничивать попытки.</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <input id="editTestClosed" type="checkbox">
+                                <label for="editTestClosed">Закрыт для выполнения</label>
+                            </div>
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <button id="saveTest" class="btn btn-primary">Сохранить</button>
+                                </div>
+                                <div class="mb-3">
+                                    <button id="deleteTest" class="btn btn-danger">Удалить</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div id="editQuestionsPlaceholder" class="border border-dark m-1 hidden">
@@ -473,6 +529,117 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div id="checkTestsPlacehoder" class="border border-dark hidden mb-1">
+            <!-- Проверка тестов, которые не прошли авто-проверку -->
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="text-center mt-3"><h5>Проверка тестов</h5></div>
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label" for="checkTestSelect">Выберите тест для проверки:</label>
+                            <select class="form-select" id="checkTestSelect" disabled>
+                                <option value="1">Подождите, пожалуйста...</option>
+                            </select>
+                        </div>
+                        <div class="text-center mb-3">
+                            <button type="submit" class="btn btn-primary" disabled>
+                                <span class="spinner spinner-border spinner-border-sm hidden" role="status"
+                                      aria-hidden="true"></span>
+                                Проверить</button>
+                        </div>
+                    </form>
+                </div>
+                <table id="checkTestsUserTable" class="table table-striped hidden">
+                    <thead>
+                    <tr>
+                        <th scope="col">Фамилия</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Попытка</th>
+                        <th scope="col">Действия</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="getTestsResults" class="border border-dark mb-1">
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="text-center mt-3"><h5>Составление отчёта</h5></div>
+                    <form>
+                        <div class="mb-3">
+                            <label for="getTestsResultsTestName">Выберите тест для составления отчёта:</label>
+                            <select id="getTestsResultsTestName" class="form-select">
+                                <option value="1">Тест 1</option>
+                                <option value="2">Тест 2</option>
+                                <option value="3">Тест 3</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="getTestsResultsGroupName">Группы:</label>
+                            <select id="getTestsResultsGroupName" class="form-select">
+                                <option value="1">Все группы</option>
+                                <option value="1">Группа 1</option>
+                                <option value="2">Группа 2</option>
+                                <option value="3">Группа 3</option>
+                            </select>
+                        </div>
+                        <div class="text-center mb-3">
+                            <button class="btn btn-primary">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Получить отчёт
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div></div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Фамилия</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Отчество</th>
+                        <th scope="col">Оценка</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">Петров</th>
+                        <td>Пётр</td>
+                        <td>Петрович</td>
+                        <td>❌0%</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Петров2</th>
+                        <td>Пётр</td>
+                        <td>Петрович</td>
+                        <td>❗50%</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Петров3</th>
+                        <td>Пётр</td>
+                        <td>Петрович</td>
+                        <td>✔75%</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Петров4</th>
+                        <td>Пётр</td>
+                        <td>Петрович</td>
+                        <td>✅90%</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Петров5</th>
+                        <td>Пётр</td>
+                        <td>Петрович</td>
+                        <td>⚜100%</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div id="availableTestsPlaceholder">

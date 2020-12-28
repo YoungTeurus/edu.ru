@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnusedLocalVariableInspection */
+/** @noinspection PhpUndefinedVariableInspection */
 
 // Возвращает массив тестов, доступных пользователю с id = userId.
 function GetAvailableTestsForUser($db, $userId)
@@ -263,6 +264,25 @@ function IfUserCanEditTests($db, $userId){
     return $returnVar;
 }
 
+// Возвращает true, если пользователь обладает возможностью проверять тесты
+function IfUserCanCheckTests($db, $userId){
+    $returnVar = false;
+    // Возвращает 1 или 0. 1 - пользователь обладает нужными правами, 0 - ... не обладает
+    $ifUserCanEditTests = $db->prepare("SELECT ableToCheckTests FROM usersgroups JOIN users u on usersgroups.id = u.groupId and u.id = :userId;");
+    $ifUserCanEditTests->bindParam(':userId', $_userId);
+
+    $_userId = $userId;
+
+    if ($ifUserCanEditTests->execute()) {
+        if ($ifUserCanEditTests->rowCount() > 0) {
+            $row = $ifUserCanEditTests->fetch(PDO::FETCH_ASSOC);
+            $returnVar = $row["ableToCheckTests"] == "1";
+        }
+    }
+
+    return $returnVar;
+}
+
 // Возвращает массив, содержащий все тесты
 function GetAllTests($db){
     $returnArray = array();
@@ -407,6 +427,160 @@ function AddNewTestAnswer($db, $testId, $questionId, $answerText, $correct){
     $_correct = $correct;
 
     if ($addNewTestAnswer->execute()) {
+        return true;
+    }
+
+    return false;
+}
+
+function CreateNewTest($db, $name, $creationDatetime, $openDatetime, $closeDatetime, $maxTries, $timeToComplete, $locked){
+    $createNewTest = $db->prepare("INSERT INTO tests(name, creationDatetime, openDatetime, closeDatetime, maxTries, timeToComplete, locked)
+                                     VALUE (:name, :creationDatetime, :openDatetime, :closeDatetime, :maxTries, :timeToComplete, :locked);");
+    $createNewTest->bindParam(':name', $_name);
+    $createNewTest->bindParam(':creationDatetime', $_creationDatetime);
+    $createNewTest->bindParam(':openDatetime', $_openDatetime);
+    $createNewTest->bindParam(':closeDatetime', $_closeDatetime);
+    $createNewTest->bindParam(':maxTries', $_maxTries);
+    $createNewTest->bindParam(':timeToComplete', $_timeToComplete);
+    $createNewTest->bindParam(':locked', $_locked);
+
+    $_name = $name;
+    $_creationDatetime = $creationDatetime;
+    $_openDatetime = ($openDatetime === "" ? null : $openDatetime);
+    $_closeDatetime = ($closeDatetime === "" ? null : $closeDatetime);
+    $_maxTries = $maxTries;
+    $_timeToComplete = ($timeToComplete === "" ? null : $timeToComplete);
+    $_locked = $locked;
+
+    if ($createNewTest->execute()) {
+        return true;
+    }
+
+    return false;
+}
+
+function UpdateTest($db, $testId, $name, $creationDatetime, $openDatetime, $closeDatetime, $maxTries, $timeToComplete, $locked){
+    $updateTest = $db->prepare("UPDATE tests
+                                    SET name = :name, creationDatetime = :creationDatetime, openDatetime = :openDatetime, closeDatetime = :closeDatetime, maxTries = :maxTries, timeToComplete = :timeToComplete, locked = :locked
+                                    WHERE id = :id;");
+    $updateTest->bindParam(':id', $_id);
+    $updateTest->bindParam(':name', $_name);
+    $updateTest->bindParam(':creationDatetime', $_creationDatetime);
+    $updateTest->bindParam(':openDatetime', $_openDatetime);
+    $updateTest->bindParam(':closeDatetime', $_closeDatetime);
+    $updateTest->bindParam(':maxTries', $_maxTries);
+    $updateTest->bindParam(':timeToComplete', $_timeToComplete);
+    $updateTest->bindParam(':locked', $_locked);
+
+    $_id = $testId;
+    $_name = $name;
+    $_creationDatetime = $creationDatetime;
+    $_openDatetime = ($openDatetime === "" ? null : $openDatetime);
+    $_closeDatetime = ($closeDatetime === "" ? null : $closeDatetime);
+    $_maxTries = $maxTries;
+    $_timeToComplete = ($timeToComplete === "" ? null : $timeToComplete);
+    $_locked = $locked;
+
+    if ($updateTest->execute()) {
+        return true;
+    }
+
+    return false;
+}
+
+// Получает все прохождения теста, в которых есть непроверенные ответы
+function GetResultsWithReviewNeeded($db, $testId){
+    $returnArray = array();
+    $getResultsWithReviewNeeded = $db->prepare("SELECT testId, testsresults.userId AS userId, try, firstName, surname, secondName
+                                                FROM testsresults JOIN users u on u.id = testsresults.userId and testId = :testId and needsReview = 1 JOIN usersinfo u2 on u.id = u2.userId
+                                                ORDER BY surname, firstName, secondName, try;");
+    $getResultsWithReviewNeeded->bindParam(':testId', $_testId);
+
+    $_testId = $testId;
+
+    if ($getResultsWithReviewNeeded->execute()) {
+        if ($getResultsWithReviewNeeded->rowCount() > 0) {
+            $returnArray = $getResultsWithReviewNeeded->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
+
+    return $returnArray;
+}
+
+// Получает все тесты, у которых есть вопросы без правильного ответа (которые нужно проверять вручную)
+function GetTestsWithQuestionsWithoutCorrectAnswer($db){
+    $returnArray = array();
+    $getTestsWithQuestionsWithoutCorrectAnswer = $db->prepare("SELECT t2.id, t2.name
+                                    FROM questiontypes JOIN testquestions t on questiontypes.id = t.questionType and hasCorrectAnswer = 0 JOIN tests t2 on t.testId = t2.id;");
+
+    if ($getTestsWithQuestionsWithoutCorrectAnswer->execute()) {
+        if ($getTestsWithQuestionsWithoutCorrectAnswer->rowCount() > 0) {
+            $returnArray = $getTestsWithQuestionsWithoutCorrectAnswer->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
+
+    return $returnArray;
+}
+
+// Получает вопрос, который нужно досмотреть, и ответ студента
+function GetQuestionsWithoutCorrectAnswerWithUserAnswers($db, $testId, $userId, $try){
+    $returnArray = array();
+    $getQuestionsWithoutCorrectAnswerWithUserAnswers = $db->prepare("SELECT testquestions.testId AS testId, userId, try, testquestions.id AS questionId, text, answer
+                                                                            FROM testquestions JOIN testsusersanswers t on testquestions.testId = t.testId and testquestions.id = t.questionId
+                                                                                AND testquestions.testId = :testId AND userId = :userId AND try = :try
+                                                                                               JOIN questiontypes q on q.id = testquestions.questionType AND q.hasCorrectAnswer = 0;");
+
+    $getQuestionsWithoutCorrectAnswerWithUserAnswers->bindParam(':testId', $_testId);
+    $getQuestionsWithoutCorrectAnswerWithUserAnswers->bindParam(':userId', $_userId);
+    $getQuestionsWithoutCorrectAnswerWithUserAnswers->bindParam(':try', $_try);
+
+    $_testId = $testId;
+    $_userId = $userId;
+    $_try = $try;
+
+    if ($getQuestionsWithoutCorrectAnswerWithUserAnswers->execute()) {
+        if ($getQuestionsWithoutCorrectAnswerWithUserAnswers->rowCount() > 0) {
+            $returnArray = $getQuestionsWithoutCorrectAnswerWithUserAnswers->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
+
+    return $returnArray;
+}
+
+// Устанавливает правильность вопроса
+function SetAnswerCorrectness($db, $testId, $userId, $tryId, $questionId, $correctness){
+    $setAnswerCorrectness = $db->prepare("CALL SetAnswerCorrectness(:testId, :questionId, :try, :userId, :correct);");
+    $setAnswerCorrectness->bindParam(':testId', $_testId);
+    $setAnswerCorrectness->bindParam(':questionId', $_questionId);
+    $setAnswerCorrectness->bindParam(':try', $_try);
+    $setAnswerCorrectness->bindParam(':userId', $_userId);
+    $setAnswerCorrectness->bindParam(':correct', $_correct);
+
+    $_testId = $testId;
+    $_questionId = $questionId;
+    $_try = $tryId;
+    $_userId = $userId;
+    $_correct = $correctness;
+
+    if ($setAnswerCorrectness->execute()) {
+        return true;
+    }
+
+    return false;
+}
+
+// Форсированно завершает указанный тест и пересчитывает оценку теста
+function ForceEndTest($db, $testId, $userId, $tryId){
+    $forceEndTest = $db->prepare("CALL ForceCountTestScore(:userId,:testId,:try);");
+    $forceEndTest->bindParam(':testId', $_testId);
+    $forceEndTest->bindParam(':try', $_try);
+    $forceEndTest->bindParam(':userId', $_userId);
+
+    $_testId = $testId;
+    $_try = $tryId;
+    $_userId = $userId;
+
+    if ($forceEndTest->execute()) {
         return true;
     }
 

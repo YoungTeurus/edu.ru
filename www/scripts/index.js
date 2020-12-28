@@ -1,9 +1,3 @@
-// Фабрика объекто типа selectOption
-const getSelectOption = (text, value) => ({
-    text: text,
-    value: value,
-})
-
 // Очищает таблицу доступных тестов
 // TODO: вынести функционал в отдельную функцию с параметром?
 function clearAvailableTests() {
@@ -367,29 +361,38 @@ function doAfterCheckingLoginStatus(logined) {
 
 const placeholders = [
     "editGroupsAvailabilityPlaceholder",
+    "editTestPlaceholder",
     "editQuestionsPlaceholder",
     "editAnswersPlaceholder",
 ];
 
+function hideElement(jQueryObject){
+    jQueryObject.addClass('hidden');
+}
+
 // Скрывает элемент, добавляя ему класс hidden
-function hideElement(selector) {
+function hideElementBySelector(selector) {
     $(selector).addClass('hidden');
 }
 
+function unhideElement(jQueryObject){
+    jQueryObject.removeClass('hidden');
+}
+
 // Отменяет скрытие элемента, убирая ему класс hidden
-function unhideElement(selector) {
+function unhideElementBySelector(selector) {
     $(selector).removeClass('hidden');
 }
 
 // Делает все PlaceHolder-ы скрытыми
 function hideAllPlaceholders() {
-    placeholders.forEach(placeholder => hideElement("#" + placeholder));
+    placeholders.forEach(placeholder => hideElementBySelector("#" + placeholder));
 }
 
 // Делает все PlaceHolder-ы скрытыми, затем отменяет скрытие одного элемента
 function hideAllPlaceholdersExceptOne(showPlaceholder) {
     hideAllPlaceholders();
-    unhideElement("#" + showPlaceholder);
+    unhideElementBySelector("#" + showPlaceholder);
 }
 
 // Возваращает информацию о всех тестах
@@ -456,21 +459,10 @@ function appendTestToEditTestsTable(editTestRowObject) {
                                             .on('click', () => {
                                                 console.log('Edit whole testId: ', editTestRowObject["id"]);
                                                 // TODO: Код для кнопки редактирования теста
+                                                hideAllPlaceholdersExceptOne("editTestPlaceholder");
+                                                setupEditTestPlaceholder(editTestRowObject["id"], editTestRowObject["name"], editTestRowObject["openDatetime"], editTestRowObject["closeDatetime"], editTestRowObject["maxTries"], editTestRowObject["locked"]);
                                             })
                                             .text("Редактировать")
-                                    )
-                            )
-                        )
-                        .append(
-                            $("<div class=\"row mb-1\">").append(
-                                $("<div>")
-                                    .append(
-                                        $("<button class=\"btn btn-danger\">")
-                                            .on('click', () => {
-                                                console.log('Delete testId: ', editTestRowObject["id"]);
-                                                // TODO: Код для кнопки удаления теста
-                                            })
-                                            .text("Удалить")
                                     )
                             )
                         )
@@ -527,6 +519,111 @@ function appendTestToEditTestsTable(editTestRowObject) {
     }
 }
 
+// Устанавливает начальное значение полей editTestPlaceholder, а также настраивает кнопки
+function setupEditTestPlaceholder(testId, testName, openDate, closeDate, triesCount, closed, createNew = false) {
+    function convertDBTimeToDatetimeInputTime(DBTime) {
+        return DBTime.replace(' ', 'T');
+    }
+
+    function convertDatetimeInputTimeToDBTime(InputTime) {
+        return (InputTime !== "" ? InputTime.replace('T', ' ') : null)
+        // if (InputTime === "")
+        //     return null;
+        // return InputTime.replace('T', ' ');
+    }
+
+    const testNameTitle = $("#editTestTestName");
+    const testNameInput = $("#editTestName");
+    const testOpenDateInput = $("#editTestOpenDate");
+    const testCloseDateInput = $("#editTestCloseDate");
+    const testClosedCheckbox = $("#editTestClosed");
+    const testTriesCount = $("#editTestTriesCount");
+
+    testNameTitle.text(testName);
+    testNameInput.val(testName);
+    testOpenDateInput.val((openDate !== null ? convertDBTimeToDatetimeInputTime(openDate) : ""));
+    testCloseDateInput.val((closeDate !== null ? convertDBTimeToDatetimeInputTime(closeDate) : ""));
+    testTriesCount.val(triesCount);
+    testClosedCheckbox.attr('checked', (closed === "1"));
+
+    $("#saveTest").off('click').on('click', e => {
+        e.preventDefault();
+        const tempTest = {
+            id: (createNew ? null : testId),
+            closeDatetime: convertDatetimeInputTimeToDBTime(testCloseDateInput.val()),
+            openDatetime: convertDatetimeInputTimeToDBTime(testOpenDateInput.val()),
+            creationDatetime: (createNew ? convertDatetimeInputTimeToDBTime(new Date().toISOString().split('.')[0]) : "2020-12-22 14:19:17"),
+            locked: ($("#editTestClosed").is(':checked') ? "1" : "0"),
+            name: testNameInput.val(),
+            maxTries: testTriesCount.val(),
+            timeToComplete: null,
+        }
+        console.log(tempTest);
+        if (createNew) {
+            // Создание нового
+            createOrUpdateTest(tempTest, true)
+                .then(msg => {
+                    console.log(msg);
+                    reloadTestEditTable();
+                }).catch(e => console.log(e));
+        } else {
+            // Изменение существующего
+            createOrUpdateTest(tempTest, false)
+                .then(msg => {
+                    console.log(msg);
+                    reloadTestEditTable();
+                }).catch(e => console.log(e));
+        }
+        hideAllPlaceholders();
+    });
+    $("#deleteTest").off('click').on('click', e => {
+        e.preventDefault();
+        // TODO: удаление теста
+        reloadTestEditTable();
+        hideAllPlaceholders();
+    });
+}
+
+// Перезагружает список тестов для редактирования
+function reloadTestEditTable(){
+    // Очищаем список тестов
+    hideElementBySelector("#editTestsTableContainer");
+    clearEditTestsTable();
+    getAllTests().then(
+        // Заполняем список тестов
+        getAllTestsHandler
+    ).catch(e => console.log(e));
+
+    function getAllTestsHandler(msg) {
+        console.log(msg);
+        if (msg["success"]) {
+            if (!msg["error"]) {
+                msg["tests"].forEach(
+                    test => appendTestToEditTestsTable(test)
+                );
+                unhideElementBySelector("#editTestsTableContainer");
+                $("#createNewTest").off('click').on('click', () => {
+                    hideAllPlaceholdersExceptOne("editTestPlaceholder");
+                    setupEditTestPlaceholder(null, "Новый тест", null, null, 1, false, true);
+                })
+            }
+        }
+    }
+}
+
+function createOrUpdateTest(testObject, createNew) {
+    let data = {form: {}};
+    data["form"]["action"] = "createOrUpdateTest";
+    data["form"]["testObject"] = testObject;
+    data["form"]["createNew"] = createNew;
+    console.log(data);
+    return postAjax(
+        siteURL + '/tests.php',
+        data,
+        new ConnectException("Произошла ошибка при отправке запроса на создание/обновление теста!")
+    );
+}
+
 // Возвращает информацию о студенческих группах, для которых открыто прохождение теста
 // Также возвращает список всех групп
 function getTestStudentsGroups(testId) {
@@ -549,7 +646,7 @@ function getTestStudentsGroups(testId) {
 //  - Очищает содержимое таблицы groupsAvailabilityTable
 function setupGroupsAvailabilityPlaceholder(testId, testName, optionsArray) {
     $("#editGroupsAvailabilityTestName").text(testName);
-    setSelectOptions("#editGroupsGroupName", optionsArray);
+    setSelectOptionsBySelector("#editGroupsGroupName", optionsArray);
     $('#addStudentsGroupToTest').data('testId', testId)
     clearGroupsAvailabilityTable();
 }
@@ -694,10 +791,10 @@ function setupAnswers(testId, questionsArray, answersArray, questionTypes) {
             const idInt = parseInt(id);
             tableBody.data('questions', tableBody.data('questions').filter(
                 qst => {
-                    if (qst["id"] !== id){
+                    if (qst["id"] !== id) {
                         // Если id элемента больше, чем id удаляемого элемента, уменьшаем его на 1.
                         const qstIdInt = parseInt(qst["id"]);
-                        if(qstIdInt > idInt){
+                        if (qstIdInt > idInt) {
                             qst["id"] = (qstIdInt - 1).toString();
                             updateQuestionRowInEditQuestionAnswersTable(qstIdInt.toString(), qst["id"], null, null);
                         }
@@ -861,7 +958,7 @@ function clearEditQuestionAnswersTable() {
 }
 
 // Обновление ряда в таблице editQuestionAnswersTable
-function updateQuestionRowInEditQuestionAnswersTable(questionId, newQuestionId = null, newQuestionText = null, newQuestionType = null){
+function updateQuestionRowInEditQuestionAnswersTable(questionId, newQuestionId = null, newQuestionText = null, newQuestionType = null) {
     $("#editQuestionAnswersTable tbody>tr").each(
         function () {
             if ($(this).data('questionId') === questionId) {
@@ -1051,7 +1148,7 @@ function appendQuestionInEditQuestionAnswersTable(testId, question, answersArray
         addAnswerToTableInQuestion(answersTable, tempAnswer);
     }
 
-    if (question["hasCorrectAnswer"] !== "1"){
+    if (question["hasCorrectAnswer"] !== "1") {
         answersTable.parent().addClass('hidden');
     }
 }
@@ -1157,24 +1254,29 @@ $(() => {
     });
     $('#editTests').on('click', e => {
         e.preventDefault();
-        unhideElement("#editTestsTable");
-        // Очищаем список тестов
-        clearEditTestsTable();
-        getAllTests().then(
-            // Заполняем список тестов
-            getAllTestsHandler
-        ).catch(e => console.log(e));
+        unhideElementBySelector("#editTestsPlaceholder");
+        reloadTestEditTable();
+        // // Очищаем список тестов
+        // clearEditTestsTable();
+        // getAllTests().then(
+        //     // Заполняем список тестов
+        //     getAllTestsHandler
+        // ).catch(e => console.log(e));
 
-        function getAllTestsHandler(msg) {
-            console.log(msg);
-            if (msg["success"]) {
-                if (!msg["error"]) {
-                    msg["tests"].forEach(
-                        test => appendTestToEditTestsTable(test)
-                    );
-                }
-            }
-        }
+        // function getAllTestsHandler(msg) {
+        //     console.log(msg);
+        //     if (msg["success"]) {
+        //         if (!msg["error"]) {
+        //             msg["tests"].forEach(
+        //                 test => appendTestToEditTestsTable(test)
+        //             );
+        //             $("#createNewTest").off('click').on('click', () => {
+        //                 hideAllPlaceholdersExceptOne("editTestPlaceholder");
+        //                 setupEditTestPlaceholder(null, "Новый тест", null, null, 1, false, true);
+        //             })
+        //         }
+        //     }
+        // }
     });
     $('#checkTests').on('click', e => {
         e.preventDefault();
