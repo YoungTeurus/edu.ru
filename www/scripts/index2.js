@@ -343,7 +343,7 @@ $(() => {
                     const optionsArray = [];
                     msg["tests"].forEach(test => {
                         optionsArray.push(
-                            getSelectOption(test["name"], test["id"])
+                            getSelectOption(test["name"] + " - " + test["countOfNeededReviews"] + " тест(-а/-ов)", test["id"])
                         );
                     });
                     setSelectOptions(checkTestSelect, optionsArray);

@@ -510,8 +510,11 @@ function GetResultsWithReviewNeeded($db, $testId){
 // Получает все тесты, у которых есть вопросы без правильного ответа (которые нужно проверять вручную)
 function GetTestsWithQuestionsWithoutCorrectAnswer($db){
     $returnArray = array();
-    $getTestsWithQuestionsWithoutCorrectAnswer = $db->prepare("SELECT t2.id, t2.name
-                                    FROM questiontypes JOIN testquestions t on questiontypes.id = t.questionType and hasCorrectAnswer = 0 JOIN tests t2 on t.testId = t2.id;");
+    $getTestsWithQuestionsWithoutCorrectAnswer = $db->prepare("SELECT t2.id, t2.name, COUNT(needsReview) AS countOfNeededReviews
+                                                                            FROM questiontypes JOIN testquestions t on questiontypes.id = t.questionType and hasCorrectAnswer = 0 JOIN tests t2 on t.testId = t2.id
+                                                                            JOIN testsresults t3 on t2.id = t3.testId AND needsReview = 1
+                                                                            GROUP BY t2.id, t2.name
+                                                                            ORDER BY id;");
 
     if ($getTestsWithQuestionsWithoutCorrectAnswer->execute()) {
         if ($getTestsWithQuestionsWithoutCorrectAnswer->rowCount() > 0) {
