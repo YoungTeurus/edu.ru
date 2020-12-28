@@ -354,4 +354,61 @@ function GetQuestionTypes($db){
 
     return $returnArray;
 }
+
+// Обновляет или вставляет вопрос в тест
+function UpdateOrInsertQuestion($db, $testId, $questionId, $questionText, $questionTypeId){
+    $updateOrInsertQuestion = $db->prepare("INSERT INTO testquestions(testId, id, text, questionType) VALUE (:testId, :id, :text, :questionType)
+                                                ON DUPLICATE  KEY UPDATE text = :text, questionType = :questionType;");
+    $updateOrInsertQuestion->bindParam(':testId', $_testId);
+    $updateOrInsertQuestion->bindParam(':id', $_id);
+    $updateOrInsertQuestion->bindParam(':text', $_text);
+    $updateOrInsertQuestion->bindParam(':questionType', $_questionType);
+
+    $_testId = $testId;
+    $_id = $questionId;
+    $_text = $questionText;
+    $_questionType = $questionTypeId;
+
+    if ($updateOrInsertQuestion->execute()) {
+        return true;
+    }
+
+    return false;
+}
+
+// Удаляет все ответы на определённый тест
+function RemoveAllTestAnswers($db, $testId){
+    $removeAllTestAnswers = $db->prepare("DELETE FROM testsanswers
+                                                WHERE testId = :testId;");
+    $removeAllTestAnswers->bindParam(':testId', $_testId);
+
+    $_testId = $testId;
+
+    if ($removeAllTestAnswers->execute()) {
+        return true;
+    }
+
+    return false;
+}
+
+// Добавляет новый ответ на вопрос определённого теста
+function AddNewTestAnswer($db, $testId, $questionId, $answerText, $correct){
+    $addNewTestAnswer = $db->prepare("INSERT INTO testsanswers(testId, questionId, answer, correct)
+                                            VALUE (:testId, :questionId, :answer, :correct);");
+    $addNewTestAnswer->bindParam(':testId', $_testId);
+    $addNewTestAnswer->bindParam(':questionId', $_questionId);
+    $addNewTestAnswer->bindParam(':answer', $_answer);
+    $addNewTestAnswer->bindParam(':correct', $_correct);
+
+    $_testId = $testId;
+    $_questionId = $questionId;
+    $_answer = $answerText;
+    $_correct = $correct;
+
+    if ($addNewTestAnswer->execute()) {
+        return true;
+    }
+
+    return false;
+}
 ?>

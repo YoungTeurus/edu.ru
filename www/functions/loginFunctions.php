@@ -32,6 +32,9 @@ function generateCode($length=10, $useLetters = true, $useNumbers = true, $useSp
 // Применяет функцию htmlspecialchars для каждого элемента массива и возвращает его.
 // Меняет исходный массив!
 function makeArrayValuesSafe(&$array){
+    if ($array == null){
+        return null;
+    }
     foreach(array_keys($array) as $key) {
         if (!is_string($array[$key])){
             continue;

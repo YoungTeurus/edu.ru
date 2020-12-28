@@ -71,7 +71,7 @@ function appendNewAvailableTest(testRowObject) {
             .append(
                 $("<td>").text(getStringOrDash(testRowObject["closeDatetime"]))
             )
-            .on('click', () => {
+            .off('click').on('click', () => {
                 console.log(testRowObject["testId"]);
                 showTestInfo(testRowObject);
             })
@@ -491,9 +491,11 @@ function appendTestToEditTestsTable(editTestRowObject) {
                     // Заполяем вопросы:
                     msg["questions"].forEach(
                         question =>
-                            appendQuestionToEditTestQuestionsTable(question, editTestRowObject["id"], msg["questions"], msg["answers"], msg["questionTypes"])
+                            appendQuestionToEditTestQuestionsTable(question)
                     );
-                    $("#editTestQuestionsButton").on('click', () => {
+                    // Нажатие кнопки "Редактировать" вверху таблицы вопросов.
+                    $("#addQuestionToTest").off('click');
+                    $("#editTestQuestionsButton").off('click').on('click', () => {
                         hideAllPlaceholdersExceptOne("editAnswersPlaceholder");
                         console.log('Edit questions of test tId:', editTestRowObject["id"]);
                         // Выводим все вопросы с ответами, открытыми для редактирования:
@@ -656,7 +658,7 @@ function clearEditTestQuestionsTable() {
 }
 
 // Добавляет вопрос в таблицу вопросов для редактирования
-function appendQuestionToEditTestQuestionsTable(questionRowObject, testId, questionsArray, answersArray, questionTypes) {
+function appendQuestionToEditTestQuestionsTable(questionRowObject) {
     $("#editTestQuestionsTable tbody").append(
         $("<tr>").append(
             $("<th scope=\"row\">").text(questionRowObject["id"])
@@ -667,36 +669,6 @@ function appendQuestionToEditTestQuestionsTable(questionRowObject, testId, quest
             .append(
                 $("<td>").text(questionRowObject["questionTypeName"])
             )
-        // .append(
-        //     $("<td>").append(
-        //         $("<div class=\"container text-center\">").append(
-        //             $("<div class=\"row mb-1\">").append(
-        //                 $("<div>").append(
-        //                     $("<button class=\"btn btn-primary\">")
-        //                         .on('click', (e) => {
-        //                             hideAllPlaceholdersExceptOne("editAnswersPlaceholder");
-        //                             console.log('Edit question qId:', questionRowObject["id"]);
-        //                             // Выводим все вопросы с ответами, открытыми для редактирования:
-        //                             setupAnswers(testId, questionsArray, answersArray, questionTypes);
-        //                         })
-        //                         .text("Редактировать")
-        //                 )
-        //             )
-        //         ).append(
-        //             $("<div class=\"row mb-1\">").append(
-        //                 $("<div>").append(
-        //                     $("<button class=\"btn btn-danger\">")
-        //                         .on('click', (e) => {
-        //                             hideAllPlaceholders();
-        //                             console.log('Remove question qId:', questionRowObject["id"]);
-        //                             // TODO: код удаления вопроса
-        //                         })
-        //                         .text("Удалить")
-        //                 )
-        //             )
-        //         )
-        //     )
-        // )
     )
 }
 
@@ -761,6 +733,7 @@ function setupAnswers(testId, questionsArray, answersArray, questionTypes) {
         }
         if (created) {
             tableBody.data('wasChanged', true);
+            newAnswer["answerId"] = (getMaxIdFromAnswers(tableBody.data('answers')) + 1).toString();
             tableBody.data('answers').push(newAnswer);
             console.log('Created answer id:', answerId, 'obj:', newAnswer);
             return;
@@ -793,7 +766,7 @@ function setupAnswers(testId, questionsArray, answersArray, questionTypes) {
     );
 
     // Создание вопросов по нажатию кнопки:
-    $("#addQuestionToTest").on('click', () => {
+    $("#addQuestionToTest").off('click').on('click', () => {
         console.log('Add question to test');
         const tableBody = $("#editQuestionAnswersTable tbody");
         tableBody.data('wasChanged', true);
@@ -827,11 +800,32 @@ function setupAnswers(testId, questionsArray, answersArray, questionTypes) {
         }
     });
 
-    $("#saveQuestionToTest").on('click', () => {
+    $("#saveQuestionToTest").off('click').on('click', () => {
         console.log('Save test');
         const tableBody = $("#editQuestionAnswersTable tbody");
         console.log(tableBody.data());
+        sendEditedTest(testId, tableBody.data()).then(msg => {
+            console.log(msg);
+            // TODO: закрыть редактирование теста
+        });
     });
+}
+
+// Отправляет на сервер обновлённый (или созданный) тест
+// testData - объект, состоящий из массивов answers, questions и двух переменных: canUpdate и wasChanged
+function sendEditedTest(testId, testData){
+    let data = {form: {}};
+    data["form"]["action"] = "sendEditedTest";
+    data["form"]["testId"] = testId;
+    data["form"]["testData"] = testData;
+
+    console.log(data);
+
+    return postAjax(
+        siteURL + '/tests.php',
+        data,
+        new ConnectException("Произошла ошибка при отправке теста на сервер!")
+    );
 }
 
 // Возвращает максимальный id, хранимый в массиве вопросов questions.
@@ -959,11 +953,11 @@ function appendQuestionInEditQuestionAnswersTable(testId, question, answersArray
                                 // TODO: добавление нового ответа
                                 let tempAnswer = {
                                     answer: "",
-                                    answerId: (getMaxIdFromAnswers(answersArray) + 1).toString(),
+                                    answerId: null,
                                     correct: "0",
                                     questionId: question["id"],
                                 }
-                                updateAnswerFunc(tempAnswer["answerId"], null, null, false, true, tempAnswer);
+                                updateAnswerFunc(null, null, null, false, true, tempAnswer);
                                 addAnswerToTableInQuestion(answersTable, tempAnswer);
                             })
                         :

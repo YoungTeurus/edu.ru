@@ -279,6 +279,52 @@ if (isset($_POST["form"])){
             $message["success"] = true;
             break;
         }
+        case "sendEditedTest":{
+            $message["recieved"] = $_POST["form"]["testData"];
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if (IfUserCanEditTests($db, $userStatus->userId)){
+                    // Если у пользователя достаточно полномочий:
+                    if (isset($_POST["form"]["testId"]) && isset($_POST["form"]["testData"])){
+                        if ($_POST["form"]["testData"]["wasChanged"] === "false"){
+                            // Если в тесте ничего не поменялось
+                            $message["wasChanged"] = false;
+                        } else {
+                            // Если в тесте что-то поменялось
+                            makeArrayValuesSafe($_POST["form"]["testData"]);
+                            makeArrayValuesSafe($_POST["form"]["testData"]["answers"]);
+                            makeArrayValuesSafe($_POST["form"]["testData"]["questions"]);
+                            $updateError = false;
+                            foreach ($_POST["form"]["testData"]["questions"] as $question){
+                                $updateError = $updateError || (!UpdateOrInsertQuestion($db, $_POST["form"]["testId"], $question["id"], $question["text"], $question["questionTypeId"]));
+                            }
+                            // Удаляем все ответы теста:
+                            RemoveAllTestAnswers($db, $_POST["form"]["testId"]);
+                            // Загружаем новые ответы:
+                            foreach ($_POST["form"]["testData"]["answers"] as $answer){
+                                $updateError = $updateError || (!AddNewTestAnswer($db, $_POST["form"]["testId"], $answer["questionId"], $answer["answer"], $answer["correct"]));
+                            }
+                            $message["updateError"] = $updateError;
+                            $message["wasChanged"] = true;
+                        }
+                    } else {
+                        // Если необходимое значение не передано.
+                        $message["error"] = true;
+                        $message["errorText"] = "Не было передано одно из следующих значений: testId, testData.";
+                    }
+                } else {
+                    // Если у пользователя недостаточно полномочий:
+                    $message["error"] = true;
+                    $message["errorText"] = "Пользователь не имеет прав на получение списка всех тестов.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
     }
 }
 
