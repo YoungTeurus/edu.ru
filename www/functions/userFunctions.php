@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnusedLocalVariableInspection */
+/** @noinspection PhpUndefinedVariableInspection */
 
 // Возвращает массив, содержащий основную информацию о пользователе и группе, к которой он принадлежит.
 function getUserInfo($db, $userId){
@@ -19,4 +20,27 @@ function getUserInfo($db, $userId){
     return $returnArray;
 }
 
+// Обновляет информацию о пользователе информацией из переданного массива
+function UpdateUserInfo($db, $userId, $userInfoArray){
+    $updateUserInfo = $db->prepare("UPDATE usersinfo
+                SET firstName = :firstName, secondName = :secondName, surname = :surname, email = :email
+                WHERE userId = :userId;");
+    $updateUserInfo->bindParam(':userId', $_userId);
+    $updateUserInfo->bindParam(':firstName', $_firstName);
+    $updateUserInfo->bindParam(':secondName', $_secondName);
+    $updateUserInfo->bindParam(':surname', $_surname);
+    $updateUserInfo->bindParam(':email', $_email);
+
+    $_userId = $userId;
+    $_firstName = $userInfoArray["firstName"];
+    $_secondName = $userInfoArray["secondName"];
+    $_surname = $userInfoArray["surname"];
+    $_email = $userInfoArray["email"];
+
+    if ($updateUserInfo->execute()) {
+        return true;
+    }
+
+    return false;
+}
 ?>

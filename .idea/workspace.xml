@@ -4,15 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="В список проверки попадают только те тесты, которые требуют проверки.">
-      <change afterPath="$PROJECT_DIR$/www/scripts/index3.js" afterDir="false" />
+    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Переключение между дейсвтиями работают нормально.">
+      <change afterPath="$PROJECT_DIR$/www/account.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/www/scripts/account.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/www/users.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/functions/testsFunctions.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/functions/testsFunctions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/functions/userFunctions.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/functions/userFunctions.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/www/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/scripts/functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/functions.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/scripts/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/scripts/index2.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index2.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/tests.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/tests.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/scripts/index3.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index3.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,7 +196,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609193668126</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Переключение между дейсвтиями работают нормально.">
+      <created>1609200362551</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1609200362551</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -229,18 +238,8 @@
     <MESSAGE value="При удалении вопроса у всех вопросов с большим id, он уменьшается." />
     <MESSAGE value="Рабочая ручная проверка тестов" />
     <MESSAGE value="В список проверки попадают только те тесты, которые требуют проверки." />
-    <option name="LAST_COMMIT_MESSAGE" value="В список проверки попадают только те тесты, которые требуют проверки." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/www/tests.php</url>
-          <line>23</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Переключение между дейсвтиями работают нормально." />
+    <option name="LAST_COMMIT_MESSAGE" value="Переключение между дейсвтиями работают нормально." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>

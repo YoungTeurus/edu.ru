@@ -326,6 +326,8 @@ function doAfterCheckingLoginStatus(logined) {
 
         // Показываем кнопку выхода из аккаунта:
         $("#logoutButtonListItem")[0].classList.remove('hidden');
+        // Показываем кнопку перехода в личный кабинет:
+        unhideElement($("#userAccountButtonListItem"));
         // Получаем инфомрацию о пользователе:
         getUserInfo().then(
             msg => {
@@ -365,24 +367,6 @@ const placeholders = [
     "editQuestionsPlaceholder",
     "editAnswersPlaceholder",
 ];
-
-function hideElement(jQueryObject){
-    jQueryObject.addClass('hidden');
-}
-
-// Скрывает элемент, добавляя ему класс hidden
-function hideElementBySelector(selector) {
-    $(selector).addClass('hidden');
-}
-
-function unhideElement(jQueryObject){
-    jQueryObject.removeClass('hidden');
-}
-
-// Отменяет скрытие элемента, убирая ему класс hidden
-function unhideElementBySelector(selector) {
-    $(selector).removeClass('hidden');
-}
 
 // Делает все PlaceHolder-ы скрытыми
 function hideAllPlaceholders() {
@@ -1301,6 +1285,8 @@ $(() => {
             _this.find(".spinner").addClass('hidden');
         }
     }
+
+    $("#userAccount").on('click', () => openUrlInNewTab(siteURL + "/account.html"));
 
     checkUserLoginStatus()
         .catch(e => console.log(e))

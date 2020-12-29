@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+    <script src="scripts/bootstrap.bundle.min.js"></script>
+    <script src="scripts/jquery-3.4.1.min.js"></script>
+    <script src="scripts/functions.js"></script>
+    <script src="scripts/account.js"></script>
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/index.css">
+</head>
+<body>
+<div id="modalPlace">
+    <div id="defaultModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow">
+    <a href="#" class="navbar-brand col-md-3 col-lg-2 me-0 px-3">EDU</a>
+</header>
+<div class="container-fluid">
+    <div class="container row m-auto">
+        <form id="userInfo" class="border border-dark form mt-3 hidden">
+            <div class="text-center"><h5>Ваша личная информация</h5></div>
+            <div class="mb-3">
+                <label for="userFirstName" class="form-label">Ваше имя:</label>
+                <input id="userFirstName" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="userSurname" class="form-label">Ваша фамилия:</label>
+                <input id="userSurname" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="userSecondName" class="form-label">Ваше отчество:</label>
+                <input id="userSecondName" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="userEmail" class="form-label">Ваш email:</label>
+                <input id="userEmail" type="email" class="form-control">
+            </div>
+            <div class="text-center mb-3">
+                <button id="saveInfo" class="btn btn-primary">
+                    <span class="spinner spinner-border spinner-border-sm hidden" role="status"
+                          aria-hidden="true"></span>
+                    Сохранить</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -361,3 +361,28 @@ function setSelectOptions(jQueryObject, optionsArray, append = false){
         jQueryObject.append(tempOption);
     });
 }
+
+
+function hideElement(jQueryObject){
+    jQueryObject.addClass('hidden');
+}
+
+// Скрывает элемент, добавляя ему класс hidden
+function hideElementBySelector(selector) {
+    $(selector).addClass('hidden');
+}
+
+function unhideElement(jQueryObject){
+    jQueryObject.removeClass('hidden');
+}
+
+// Отменяет скрытие элемента, убирая ему класс hidden
+function unhideElementBySelector(selector) {
+    $(selector).removeClass('hidden');
+}
+
+
+// Устанавливает или убирает аттрибут disabled для элемента
+function setDisabledInput(jQueryObject, state) {
+    jQueryObject.attr('disabled', state)
+}
