@@ -79,7 +79,7 @@ function forceEndTest(testId, userId, tryId){
 }
 
 function appendCheckTestsUserTable(result) {
-    const tbody = $("#checkTestsUserTable tbody");
+    const tbody = $("#checkTestsUserTable>tbody");
     const appendedRow = $("<tr>");
 
     //<editor-fold desc="Всё, связанное с табличкой вопрос-ответ-действие">
@@ -104,7 +104,7 @@ function appendCheckTestsUserTable(result) {
     );
     //</editor-fold>
 
-    function appendTableWithQuestionAndAnswer(questionAnswerCombo) {
+    function appendTableWithQuestionAndAnswer(tableWithQuestionAndAnswerTbody, questionAnswerCombo) {
         const appendedRow = $("<tr>");
 
         const acceptButtonLoader = $("<span class=\"spinner-border spinner-border-sm hidden\" role=\"status\" aria-hidden=\"true\">");
@@ -250,7 +250,7 @@ function appendCheckTestsUserTable(result) {
                                                         // Дополнять табличку
                                                         msg["questionAnswerCombo"].forEach(
                                                             qAC => {
-                                                                appendTableWithQuestionAndAnswer(qAC);
+                                                                appendTableWithQuestionAndAnswer(tableWithQuestionAndAnswer.find('tbody'), qAC);
                                                             }
                                                         );
                                                         // Показываем табличку:
