@@ -1294,8 +1294,8 @@ try</RefColNames>
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <trigger id="326" parent="218" name="ActionsAfterInsert">
-      <SourceTextLength>288</SourceTextLength>
+    <trigger id="326" parent="218" name="AfterInsert">
+      <SourceTextLength>73</SourceTextLength>
       <Definer>root@localhost</Definer>
       <Turn>after-row</Turn>
       <Events>I</Events>

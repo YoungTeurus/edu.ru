@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Перед фиксом">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/scripts/index2.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index2.js" afterDir="false" />
-    </list>
+    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Пофикшен баг с неправильной вложенностью tbody." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -224,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609238927517</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Пофикшен баг с неправильной вложенностью tbody.">
+      <created>1609239383519</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1609239383519</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -264,7 +268,8 @@
     <MESSAGE value="Добавление пользователей в студенческие группы работает.&#10;&#10;&quot;Минимальный функционал&quot;." />
     <MESSAGE value="Пред-финальная версия." />
     <MESSAGE value="Перед фиксом" />
-    <option name="LAST_COMMIT_MESSAGE" value="Перед фиксом" />
+    <MESSAGE value="Пофикшен баг с неправильной вложенностью tbody." />
+    <option name="LAST_COMMIT_MESSAGE" value="Пофикшен баг с неправильной вложенностью tbody." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>
