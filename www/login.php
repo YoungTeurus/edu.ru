@@ -49,7 +49,7 @@ if (isset($_POST["form"])){
             break;
         }
         case "register":{
-            $registerObject = registerUser($db, $_POST["form"]["userLogin"], $_POST["form"]["userPassword"]);
+            $registerObject = registerUser($db, $_POST["form"]["userLogin"], $_POST["form"]["userPassword"], $_POST["form"]["userEmail"]);
             if($registerObject->completed){
                 $message["registered"] = true;
             } else {

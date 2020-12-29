@@ -229,11 +229,12 @@ function removeUserCookie($db, $cookieHash, $userIp){
 //  errorText (текст ошибки, если есть),
 //  errorObject (к какому элементу относится ошибка),
 //  userId (идентификатор зарегистрированного пользователя или NULL при ошибке).
-function registerUser($db, $login, $password){
+function registerUser($db, $login, $password, $email){
     // Добавляет строку в таблицу "users":
-    $addUser = $db->prepare("CALL RegisterUser(:_login, :password_hash)");
+    $addUser = $db->prepare("CALL RegisterUser(:_login, :password_hash, :email)");
     $addUser->bindParam(':_login', $_login);
     $addUser->bindParam(':password_hash', $passwordHash);
+    $addUser->bindParam(':email', $_email);
 
     $returnObject = new stdClass();
     $returnObject->completed = false;
@@ -247,6 +248,7 @@ function registerUser($db, $login, $password){
     else{
         $_login = htmlspecialchars($login);
         $passwordHash = md5(htmlspecialchars($password));
+        $_email = $email;
 
         if ($addUser->execute()){
             if ($addUser->rowCount()>0){

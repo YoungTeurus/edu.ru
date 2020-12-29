@@ -22,7 +22,9 @@ catch (PDOException $e){
 }
 // Конец настройки БД.
 if (isset($_POST["form"])){
+    // Делаем все значения массива безопасными (htmlspecialchars):
     makeArrayValuesSafe($_POST["form"]);
+    // Получаем статус авторизации пользователя
     $userStatus = checkIfUserLogined($db, $_SERVER['REMOTE_ADDR'], $_COOKIE['loginHash']);
     switch ($_POST["form"]["action"]){
         case "addStudentsGroupToTest":{

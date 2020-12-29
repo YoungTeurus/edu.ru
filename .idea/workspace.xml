@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Добавление пользователей в студенческие группы работает.&#10;&#10;&quot;Минимальный функционал&quot;.">
+    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Пред-финальная версия.">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f/storage_v2/_src_/schema/edudb.tH6-BQ.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f/storage_v2/_src_/schema/edudb.tH6-BQ.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/www/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/scripts/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/scripts/index2.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/functions/loginFunctions.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/functions/loginFunctions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/tests.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/tests.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,7 +214,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609210825656</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Пред-финальная версия.">
+      <created>1609229790805</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1609229790805</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,7 +259,8 @@
     <MESSAGE value="Переключение между дейсвтиями работают нормально." />
     <MESSAGE value="Личный кабинет." />
     <MESSAGE value="Добавление пользователей в студенческие группы работает.&#10;&#10;&quot;Минимальный функционал&quot;." />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавление пользователей в студенческие группы работает.&#10;&#10;&quot;Минимальный функционал&quot;." />
+    <MESSAGE value="Пред-финальная версия." />
+    <option name="LAST_COMMIT_MESSAGE" value="Пред-финальная версия." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>
