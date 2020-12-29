@@ -238,6 +238,12 @@
                               aria-hidden="true"></span>
                         Проверить тесты</button>
                 </div>
+                <div class="mb-1 hidden">
+                    <button id="setUserGroup" class="btn btn-outline-primary">
+                        <span class="spinner spinner-border spinner-border-sm hidden" role="status"
+                              aria-hidden="true"></span>
+                        Установить пользователю группу</button>
+                </div>
             </div>
         </div>
         <div id="editTestsPlaceholder" class="border border-dark hidden mb-1">
@@ -567,6 +573,44 @@
                     <tbody>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div id="setUserGroupPlaceholder" class="border border-dark hidden mb-1">
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="text-center mt-3"><h5>Редактирование группы пользователя</h5></div>
+                    <form id="setUserGroupForm">
+                        <div class="mb-3">
+                            <label for="setUserGroupFormUserSelect" class="form-label">Выберите пользователя</label>
+                            <select id="setUserGroupFormUserSelect" class="form-select">
+                                <option value="">Выберите пользователя...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="setUserGroupFormGroupSelect" class="form-label">Добавить пользователя в группу:</label>
+                            <select id="setUserGroupFormGroupSelect" class="form-select">
+                                <option value="">Общая группа</option>
+                            </select>
+                            <button id="addGroupToUser" class="btn btn-primary">
+                                <span class="spinner spinner-border spinner-border-sm hidden" role="status"
+                                      aria-hidden="true"></span>
+                                Добавить</button>
+                        </div>
+                    </form>
+                    <div class="container-fluid hidden">
+                        <div class="text-center"><h5>Текущие группы пользователя</h5></div>
+                        <table id="setUserGroupTable" class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Группа пользователя</th>
+                                <th scope="col">Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="availableTestsPlaceholder">

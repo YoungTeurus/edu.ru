@@ -39,7 +39,8 @@ function hideAllTestControlsPlaceholders(){
 const testControlsPlaceholders = [
     "editTestsPlaceholder",
     "checkTestsPlaceholder",
-    "getTestsResultsPlaceholder"
+    "getTestsResultsPlaceholder",
+    "setUserGroupPlaceholder"
 ]
 
 function ConnectException(message) {

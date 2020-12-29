@@ -4,17 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Переключение между дейсвтиями работают нормально.">
-      <change afterPath="$PROJECT_DIR$/www/account.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/www/scripts/account.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/www/users.php" afterDir="false" />
+    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Личный кабинет.">
+      <change afterPath="$PROJECT_DIR$/MySQL____localhost-2020_12_29_04_40_42-dump.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/functions/userFunctions.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/functions/userFunctions.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/www/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/scripts/functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/functions.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/scripts/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/scripts/index2.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index2.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/scripts/index3.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index3.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/users.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +66,7 @@
       <recent name="D:\Coding\JS\eduapp\src\styles" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\WebServers\home\edu.ru" />
       <recent name="C:\WebServers\home\edu.ru\www\scripts" />
       <recent name="C:\WebServers\home\edu.ru\www\styles" />
       <recent name="C:\WebServers\home\site5.ru\www\scripts" />
@@ -203,7 +203,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609200362551</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Личный кабинет.">
+      <created>1609203716967</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1609203716967</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -239,7 +246,8 @@
     <MESSAGE value="Рабочая ручная проверка тестов" />
     <MESSAGE value="В список проверки попадают только те тесты, которые требуют проверки." />
     <MESSAGE value="Переключение между дейсвтиями работают нормально." />
-    <option name="LAST_COMMIT_MESSAGE" value="Переключение между дейсвтиями работают нормально." />
+    <MESSAGE value="Личный кабинет." />
+    <option name="LAST_COMMIT_MESSAGE" value="Личный кабинет." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>

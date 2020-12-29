@@ -55,6 +55,96 @@ if (isset($_POST["form"])){
             $message["success"] = true;
             break;
         }
+        case "getAllUsers":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if (IfUserCanChangeStudentsGroup($db, $userStatus->userId)){
+                    $message["users"] = GetAllUsers($db);
+                } else {
+                    // Если у пользователя недостаточно полномочий:
+                    $message["error"] = true;
+                    $message["errorText"] = "Пользователь не имеет прав на получение списка всех тестов.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
+        case "getUserGroups":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if(isset($_POST["form"]["userId"])){
+                    if (IfUserCanChangeStudentsGroup($db, $userStatus->userId)){
+                        $message["userGroups"] = GetUserGroups($db, $_POST["form"]["userId"]);
+                    } else {
+                        // Если у пользователя недостаточно полномочий:
+                        $message["error"] = true;
+                        $message["errorText"] = "Пользователь не имеет прав на получение списка всех тестов.";
+                    }
+                } else {
+                    // Если необходимое значение не передано.
+                    $message["error"] = true;
+                    $message["errorText"] = "Не было передано одно из следующих значений: userId.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
+        case "removeUserFromGroup":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if(isset($_POST["form"]["userId"]) && isset($_POST["form"]["groupId"])){
+                    if (IfUserCanChangeStudentsGroup($db, $userStatus->userId)){
+                        $message["removed"] = RemoveUserFromGroup($db, $_POST["form"]["userId"], $_POST["form"]["groupId"]);
+                    } else {
+                        // Если у пользователя недостаточно полномочий:
+                        $message["error"] = true;
+                        $message["errorText"] = "Пользователь не имеет прав на получение списка всех тестов.";
+                    }
+                } else {
+                    // Если необходимое значение не передано.
+                    $message["error"] = true;
+                    $message["errorText"] = "Не было передано одно из следующих значений: userId, groupId.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
+        case "addUserToGroup":{
+            if ($userStatus->logined) {
+                // Если пользователь авторизован:
+                if(isset($_POST["form"]["userId"]) && isset($_POST["form"]["groupId"])){
+                    if (IfUserCanChangeStudentsGroup($db, $userStatus->userId)){
+                        $message["added"] = AddUserToGroup($db, $_POST["form"]["userId"], $_POST["form"]["groupId"]);
+                    } else {
+                        // Если у пользователя недостаточно полномочий:
+                        $message["error"] = true;
+                        $message["errorText"] = "Пользователь не имеет прав на получение списка всех тестов.";
+                    }
+                } else {
+                    // Если необходимое значение не передано.
+                    $message["error"] = true;
+                    $message["errorText"] = "Не было передано одно из следующих значений: userId, groupId.";
+                }
+            } else {
+                // Если пользователь не авторизован:
+                $message["error"] = true;
+                $message["errorText"] = "Пользователь не авторизован.";
+            }
+            $message["success"] = true;
+            break;
+        }
     }
 }
 

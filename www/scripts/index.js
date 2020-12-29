@@ -310,6 +310,10 @@ function reactOnUserInfo() {
         $("#checkTests").parent().removeClass('hidden');
         $("#getResults").parent().removeClass('hidden');
     }
+    if (userInfo["ableToChangeUsersStudentGroup"] === "1"){
+        // Елси пользователь может менять студенческие группы пользователей
+        $('#setUserGroup').parent().removeClass('hidden');
+    }
 
     // TODO: Выводить имя пользователя куда-нибудь
 }

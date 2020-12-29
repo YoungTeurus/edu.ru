@@ -1359,483 +1359,489 @@ try</RefColNames>
       <DataType>tinyint(1)|0s</DataType>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <key id="337" parent="220" name="PRIMARY">
+    <column id="337" parent="220" name="ableToChangeUsersStudentGroup">
+      <Position>5</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>0</DefaultExpression>
+    </column>
+    <key id="338" parent="220" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="338" parent="221" name="userId">
+    <column id="339" parent="221" name="userId">
       <Position>1</Position>
       <Comment>Идентификатор пользователя</Comment>
       <DataType>int(11)|0s</DataType>
     </column>
-    <column id="339" parent="221" name="firstName">
+    <column id="340" parent="221" name="firstName">
       <Position>2</Position>
       <Comment>Имя пользователя</Comment>
       <DataType>varchar(64)|0s</DataType>
     </column>
-    <column id="340" parent="221" name="surname">
+    <column id="341" parent="221" name="surname">
       <Position>3</Position>
       <Comment>Фамилия пользователя</Comment>
       <DataType>varchar(64)|0s</DataType>
     </column>
-    <column id="341" parent="221" name="secondName">
+    <column id="342" parent="221" name="secondName">
       <Position>4</Position>
       <Comment>Отчество пользователя</Comment>
       <DataType>varchar(64)|0s</DataType>
     </column>
-    <column id="342" parent="221" name="email">
+    <column id="343" parent="221" name="email">
       <Position>5</Position>
       <Comment>Электронная почта пользователя</Comment>
       <DataType>varchar(128)|0s</DataType>
     </column>
-    <index id="343" parent="221" name="usersInfo_users_id_fk">
+    <index id="344" parent="221" name="usersInfo_users_id_fk">
       <ColNames>userId</ColNames>
       <Type>btree</Type>
     </index>
-    <foreign-key id="344" parent="221" name="usersInfo_users_id_fk">
+    <foreign-key id="345" parent="221" name="usersInfo_users_id_fk">
       <ColNames>userId</ColNames>
       <RefTableName>users</RefTableName>
       <RefColNames>id</RefColNames>
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <column id="345" parent="222" name="userId">
+    <column id="346" parent="222" name="userId">
       <Position>1</Position>
       <Comment>Идентификатор пользователя</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <column id="346" parent="222" name="studentgroupId">
+    <column id="347" parent="222" name="studentgroupId">
       <Position>2</Position>
       <Comment>Идентификатор студенческой группы</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
     </column>
-    <index id="347" parent="222" name="usersstudentsgroups_studentsgroups_id_fk">
+    <index id="348" parent="222" name="usersstudentsgroups_studentsgroups_id_fk">
       <ColNames>studentgroupId</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="348" parent="222" name="PRIMARY">
+    <key id="349" parent="222" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>userId
 studentgroupId</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="349" parent="222" name="usersstudentsgroups_users_id_fk">
+    <foreign-key id="350" parent="222" name="usersstudentsgroups_users_id_fk">
       <ColNames>userId</ColNames>
       <RefTableName>users</RefTableName>
       <RefColNames>id</RefColNames>
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <foreign-key id="350" parent="222" name="usersstudentsgroups_studentsgroups_id_fk">
+    <foreign-key id="351" parent="222" name="usersstudentsgroups_studentsgroups_id_fk">
       <ColNames>studentgroupId</ColNames>
       <RefTableName>studentsgroups</RefTableName>
       <RefColNames>id</RefColNames>
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <column id="351" parent="223" name="testId">
+    <column id="352" parent="223" name="testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="352" parent="223" name="questionsCount">
+    <column id="353" parent="223" name="questionsCount">
       <Position>2</Position>
       <DataType>bigint(21)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="353" parent="224" name="userId">
+    <column id="354" parent="224" name="userId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="354" parent="224" name="testId">
+    <column id="355" parent="224" name="testId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="355" parent="224" name="name">
+    <column id="356" parent="224" name="name">
       <Position>3</Position>
       <DataType>varchar(256)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="356" parent="224" name="creationDatetime">
+    <column id="357" parent="224" name="creationDatetime">
       <Position>4</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="357" parent="224" name="openDatetime">
+    <column id="358" parent="224" name="openDatetime">
       <Position>5</Position>
       <DataType>datetime|0s</DataType>
     </column>
-    <column id="358" parent="224" name="closeDatetime">
+    <column id="359" parent="224" name="closeDatetime">
       <Position>6</Position>
       <DataType>datetime|0s</DataType>
     </column>
-    <column id="359" parent="224" name="maxTries">
+    <column id="360" parent="224" name="maxTries">
       <Position>7</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="360" parent="224" name="timeToComplete">
+    <column id="361" parent="224" name="timeToComplete">
       <Position>8</Position>
       <DataType>time|0s</DataType>
     </column>
-    <column id="361" parent="224" name="usedTries">
+    <column id="362" parent="224" name="usedTries">
       <Position>9</Position>
       <DataType>bigint(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="362" parent="224" name="isCompleted">
+    <column id="363" parent="224" name="isCompleted">
       <Position>10</Position>
       <DataType>bigint(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="363" parent="224" name="inProgress">
+    <column id="364" parent="224" name="inProgress">
       <Position>11</Position>
       <DataType>int(1)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="364" parent="225" name="userId">
+    <column id="365" parent="225" name="userId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="365" parent="225" name="testId">
+    <column id="366" parent="225" name="testId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="366" parent="225" name="testTries">
+    <column id="367" parent="225" name="testTries">
       <Position>3</Position>
       <DataType>bigint(21)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <argument id="367" parent="226" name="_userId">
+    <argument id="368" parent="226" name="_userId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="368" parent="226" name="_testId">
+    <argument id="369" parent="226" name="_testId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="369" parent="226" name="_questionId">
+    <argument id="370" parent="226" name="_questionId">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="370" parent="226" name="_answer">
+    <argument id="371" parent="226" name="_answer">
       <Position>4</Position>
       <DataType>varchar(1024)|0s</DataType>
     </argument>
-    <argument id="371" parent="227" name="_testId">
+    <argument id="372" parent="227" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="372" parent="227" name="_studentgroupId">
+    <argument id="373" parent="227" name="_studentgroupId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="373" parent="228">
+    <argument id="374" parent="228">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>tinyint(1)|0s</DataType>
     </argument>
-    <argument id="374" parent="228" name="_userId">
+    <argument id="375" parent="228" name="_userId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="375" parent="228" name="_testId">
+    <argument id="376" parent="228" name="_testId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="376" parent="229">
+    <argument id="377" parent="229">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="377" parent="229" name="_testId">
+    <argument id="378" parent="229" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="378" parent="229" name="_questionId">
+    <argument id="379" parent="229" name="_questionId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="379" parent="229" name="_text">
+    <argument id="380" parent="229" name="_text">
       <Position>3</Position>
       <DataType>varchar(1024)|0s</DataType>
     </argument>
-    <argument id="380" parent="229" name="_correct">
+    <argument id="381" parent="229" name="_correct">
       <Position>4</Position>
       <DataType>tinyint(1)|0s</DataType>
     </argument>
-    <argument id="381" parent="230">
+    <argument id="382" parent="230">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="382" parent="230" name="_testId">
+    <argument id="383" parent="230" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="383" parent="230" name="_text">
+    <argument id="384" parent="230" name="_text">
       <Position>2</Position>
       <DataType>varchar(1024)|0s</DataType>
     </argument>
-    <argument id="384" parent="230" name="_questionType">
+    <argument id="385" parent="230" name="_questionType">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="385" parent="231">
+    <argument id="386" parent="231">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="386" parent="231" name="_name">
+    <argument id="387" parent="231" name="_name">
       <Position>1</Position>
       <DataType>varchar(256)|0s</DataType>
     </argument>
-    <argument id="387" parent="231" name="_openDatetime">
+    <argument id="388" parent="231" name="_openDatetime">
       <Position>2</Position>
       <DataType>datetime|0s</DataType>
     </argument>
-    <argument id="388" parent="231" name="_closeDatetime">
+    <argument id="389" parent="231" name="_closeDatetime">
       <Position>3</Position>
       <DataType>datetime|0s</DataType>
     </argument>
-    <argument id="389" parent="231" name="_maxTries">
+    <argument id="390" parent="231" name="_maxTries">
       <Position>4</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="390" parent="231" name="_timeToComplete">
+    <argument id="391" parent="231" name="_timeToComplete">
       <Position>5</Position>
       <DataType>time|0s</DataType>
     </argument>
-    <argument id="391" parent="232" name="_testId">
+    <argument id="392" parent="232" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="392" parent="232" name="_questionId">
+    <argument id="393" parent="232" name="_questionId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="393" parent="233" name="_answerId">
+    <argument id="394" parent="233" name="_answerId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="394" parent="234" name="_testId">
+    <argument id="395" parent="234" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="395" parent="234" name="_questionId">
+    <argument id="396" parent="234" name="_questionId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="396" parent="235" name="_id">
+    <argument id="397" parent="235" name="_id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="397" parent="236" name="_userId">
+    <argument id="398" parent="236" name="_userId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="398" parent="236" name="_testId">
+    <argument id="399" parent="236" name="_testId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="399" parent="237" name="_userId">
+    <argument id="400" parent="237" name="_userId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="400" parent="237" name="_testId">
+    <argument id="401" parent="237" name="_testId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="401" parent="237" name="_try">
+    <argument id="402" parent="237" name="_try">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="402" parent="238" name="_testid">
+    <argument id="403" parent="238" name="_testid">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="403" parent="238" name="_questionId">
+    <argument id="404" parent="238" name="_questionId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="404" parent="239">
+    <argument id="405" parent="239">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="405" parent="239" name="_userId">
+    <argument id="406" parent="239" name="_userId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="406" parent="239" name="_testId">
+    <argument id="407" parent="239" name="_testId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="407" parent="240">
+    <argument id="408" parent="240">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="408" parent="240" name="_testId">
+    <argument id="409" parent="240" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="409" parent="241" name="_testId">
+    <argument id="410" parent="241" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="410" parent="241" name="_questionId">
+    <argument id="411" parent="241" name="_questionId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="411" parent="242" name="_testID">
+    <argument id="412" parent="242" name="_testID">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="412" parent="243" name="_testId">
+    <argument id="413" parent="243" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="413" parent="243" name="_questionId">
+    <argument id="414" parent="243" name="_questionId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="414" parent="244">
+    <argument id="415" parent="244">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>float|0s</DataType>
     </argument>
-    <argument id="415" parent="244" name="_testId">
+    <argument id="416" parent="244" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="416" parent="244" name="_userId">
+    <argument id="417" parent="244" name="_userId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="417" parent="244" name="_try">
+    <argument id="418" parent="244" name="_try">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="418" parent="245">
+    <argument id="419" parent="245">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="419" parent="245" name="_userId">
+    <argument id="420" parent="245" name="_userId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="420" parent="245" name="_testId">
+    <argument id="421" parent="245" name="_testId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="421" parent="246" name="_login">
+    <argument id="422" parent="246" name="_login">
       <Position>1</Position>
       <DataType>varchar(64)|0s</DataType>
     </argument>
-    <argument id="422" parent="246" name="_passwordHash">
+    <argument id="423" parent="246" name="_passwordHash">
       <Position>2</Position>
       <DataType>varbinary(256)|0s</DataType>
     </argument>
-    <argument id="423" parent="247" name="_testId">
+    <argument id="424" parent="247" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="424" parent="247" name="_studentgroupId">
+    <argument id="425" parent="247" name="_studentgroupId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="425" parent="248" name="_testId">
+    <argument id="426" parent="248" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="426" parent="248" name="_questionId">
+    <argument id="427" parent="248" name="_questionId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="427" parent="248" name="_try">
+    <argument id="428" parent="248" name="_try">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="428" parent="248" name="_userId">
+    <argument id="429" parent="248" name="_userId">
       <Position>4</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="429" parent="248" name="_correct">
+    <argument id="430" parent="248" name="_correct">
       <Position>5</Position>
       <DataType>tinyint(1)|0s</DataType>
     </argument>
-    <argument id="430" parent="249" name="_userId">
+    <argument id="431" parent="249" name="_userId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="431" parent="249" name="_testId">
+    <argument id="432" parent="249" name="_testId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="432" parent="250" name="_answerId">
+    <argument id="433" parent="250" name="_answerId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="433" parent="250" name="_text">
+    <argument id="434" parent="250" name="_text">
       <Position>2</Position>
       <DataType>varchar(1024)|0s</DataType>
     </argument>
-    <argument id="434" parent="250" name="_correct">
+    <argument id="435" parent="250" name="_correct">
       <Position>3</Position>
       <DataType>tinyint(1)|0s</DataType>
     </argument>
-    <argument id="435" parent="251" name="_testId">
+    <argument id="436" parent="251" name="_testId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="436" parent="251" name="_questionId">
+    <argument id="437" parent="251" name="_questionId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="437" parent="251" name="_text">
+    <argument id="438" parent="251" name="_text">
       <Position>3</Position>
       <DataType>varchar(1024)|0s</DataType>
     </argument>
-    <argument id="438" parent="251" name="_questionType">
+    <argument id="439" parent="251" name="_questionType">
       <Position>4</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="439" parent="252" name="_id">
+    <argument id="440" parent="252" name="_id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="440" parent="252" name="_name">
+    <argument id="441" parent="252" name="_name">
       <Position>2</Position>
       <DataType>varchar(256)|0s</DataType>
     </argument>
-    <argument id="441" parent="252" name="_openDatetime">
+    <argument id="442" parent="252" name="_openDatetime">
       <Position>3</Position>
       <DataType>datetime|0s</DataType>
     </argument>
-    <argument id="442" parent="252" name="_closeDatetime">
+    <argument id="443" parent="252" name="_closeDatetime">
       <Position>4</Position>
       <DataType>datetime|0s</DataType>
     </argument>
-    <argument id="443" parent="252" name="_maxTries">
+    <argument id="444" parent="252" name="_maxTries">
       <Position>5</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="444" parent="252" name="_timeToComplete">
+    <argument id="445" parent="252" name="_timeToComplete">
       <Position>6</Position>
       <DataType>time|0s</DataType>
     </argument>
-    <argument id="445" parent="253">
+    <argument id="446" parent="253">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>tinyint(1)|0s</DataType>
     </argument>
-    <argument id="446" parent="253" name="_userId">
+    <argument id="447" parent="253" name="_userId">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
-    <argument id="447" parent="253" name="_testId">
+    <argument id="448" parent="253" name="_testId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
     </argument>
