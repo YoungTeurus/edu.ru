@@ -300,17 +300,20 @@ function generateTriesTable(testId) {
 // Производит действия после получения UserInfo
 function reactOnUserInfo() {
     if (userInfo["ableToEditTests"] === "1") {
+        unhideElement($('#testControls'));
         // Если пользователь может редактировать тесты
         // Показываем соответствующую кнопку:
         $("#editTests").parent().removeClass('hidden');
     }
     if (userInfo["ableToCheckTests"] === "1") {
+        unhideElement($('#testControls'));
         // Елси пользователь может проверять тесты
         // Показываем соответствующую кнопку:
         $("#checkTests").parent().removeClass('hidden');
         $("#getResults").parent().removeClass('hidden');
     }
     if (userInfo["ableToChangeUsersStudentGroup"] === "1"){
+        unhideElement($('#testControls'));
         // Елси пользователь может менять студенческие группы пользователей
         $('#setUserGroup').parent().removeClass('hidden');
     }
@@ -327,6 +330,8 @@ function doAfterCheckingLoginStatus(logined) {
 
     if (isUserLogined) {
         // Если пользователь авторизован на момент входа на сайт:
+        // Показываем таблицу с тестами
+        unhideElement($('#availableTestsPlaceholder'));
 
         // Показываем кнопку выхода из аккаунта:
         $("#logoutButtonListItem")[0].classList.remove('hidden');
@@ -1233,9 +1238,7 @@ $(() => {
             .then(
                 msg => {
                     console.log(msg);
-                    setTimeout(() => {
-                        document.location.reload();
-                    }, 1000)
+                    document.location.reload();
                 }
             )
             .catch(e => console.log(e));

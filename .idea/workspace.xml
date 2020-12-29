@@ -4,16 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Личный кабинет.">
-      <change afterPath="$PROJECT_DIR$/MySQL____localhost-2020_12_29_04_40_42-dump.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/af9892d1-8e40-475f-b559-905ecedcac0f.xml" afterDir="false" />
+    <list default="true" id="38ac2b5a-aed0-4bea-95cb-fa184c174e4d" name="Default Changelist" comment="Добавление пользователей в студенческие группы работает.&#10;&#10;&quot;Минимальный функционал&quot;.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/functions/userFunctions.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/functions/userFunctions.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/www/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/scripts/functions.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/functions.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/www/scripts/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/scripts/index3.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index3.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/www/users.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/www/scripts/index2.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/scripts/index2.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +51,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -210,7 +205,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609203716967</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Добавление пользователей в студенческие группы работает.&#10;&#10;&quot;Минимальный функционал&quot;.">
+      <created>1609210825656</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1609210825656</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -247,7 +249,8 @@
     <MESSAGE value="В список проверки попадают только те тесты, которые требуют проверки." />
     <MESSAGE value="Переключение между дейсвтиями работают нормально." />
     <MESSAGE value="Личный кабинет." />
-    <option name="LAST_COMMIT_MESSAGE" value="Личный кабинет." />
+    <MESSAGE value="Добавление пользователей в студенческие группы работает.&#10;&#10;&quot;Минимальный функционал&quot;." />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавление пользователей в студенческие группы работает.&#10;&#10;&quot;Минимальный функционал&quot;." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>

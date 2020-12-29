@@ -514,7 +514,8 @@ $(() => {
 
                         getTestsResult.off('click').on('click', getResultsButtonClickHandler);
 
-                        function getResultsButtonClickHandler() {
+                        function getResultsButtonClickHandler(e) {
+                            e.preventDefault();
                             unhideElement(getTestsResultLoader);
                             getTestResults(getTestsResultTestSelect.val(), getTestsResultGroupSelect.val()).then(msg => {
                                 console.log(msg);
