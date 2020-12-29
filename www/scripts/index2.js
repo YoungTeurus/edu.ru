@@ -313,13 +313,14 @@ $(() => {
         unhideElement(checkTestsButtonLoader);
         // Блокируем кнопку "Проверить тесты":
         setDisabledInput(checkTestsButton, true);
-        // Кнопка для запуска проверки тестов
-        const checkTestsPlacehoder = $("#checkTestsPlacehoder");
+        const checkTestsPlaceholder = $("#checkTestsPlaceholder");
         const checkTestSelect = $("#checkTestSelect");
-        const checkButton = checkTestsPlacehoder.find("form button");
+        // Кнопка для запуска проверки тестов
+        const checkButton = checkTestsPlaceholder.find("form button");
         const checkButtonLoader = checkButton.find(".spinner");
         // Показываем блок
-        unhideElement(checkTestsPlacehoder);
+        hideAllTestControlsPlaceholders();
+        unhideElement(checkTestsPlaceholder);
         // Блокируем select и кнопку "Проверить", прячем загрузчик таблицы
         setDisabledInput(checkTestSelect, true);
         setDisabledInput(checkButton, true);
@@ -336,16 +337,23 @@ $(() => {
                     hideElement(checkTestsButtonLoader);
                     // Разблокируем кнопку "Проверить тесты":
                     setDisabledInput(checkTestsButton, false);
-                    // Разблокируем кнопку:
-                    setDisabledInput($(this), false);
-                    setDisabledInput(checkTestSelect, false);
                     // После получения объекта, заполняем select
                     const optionsArray = [];
+                    if(msg["tests"].length === 0){
+                        optionsArray.push(
+                            getSelectOption("Непроверенных тестов не найдено!", "")
+                        );
+                        setSelectOptions(checkTestSelect, optionsArray);
+                        return;
+                    }
                     msg["tests"].forEach(test => {
                         optionsArray.push(
                             getSelectOption(test["name"] + " - " + test["countOfNeededReviews"] + " тест(-а/-ов)", test["id"])
                         );
                     });
+                    // Разблокируем кнопку:
+                    setDisabledInput($(this), false);
+                    setDisabledInput(checkTestSelect, false);
                     setSelectOptions(checkTestSelect, optionsArray);
                     setDisabledInput(checkButton, false);
                     // Добавляем действие кнопке "Проверить"

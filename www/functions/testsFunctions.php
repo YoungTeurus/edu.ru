@@ -589,4 +589,35 @@ function ForceEndTest($db, $testId, $userId, $tryId){
 
     return false;
 }
+
+// Получает результаты выполнения для теста
+// Если groupId === "", сортировка по группе не осуществляется
+function GetTestResults($db, $testId, $groupId){
+    $returnArray = array();
+    if ($groupId === ""){
+        $GetTestResults = $db->prepare("SELECT firstName, surname, secondName, testId, MAX(finished) AS finished, IFNULL(MAX(score), 0) as score
+                                            FROM testsresults JOIN users u on u.id = testsresults.userId JOIN usersinfo u2 on u.id = u2.userId
+                                            WHERE testId = :testId and needsReview = 0
+                                            GROUP BY testsresults.userId, testId;");
+    } else {
+        $GetTestResults = $db->prepare("SELECT firstName, surname, secondName, testId, MAX(finished) AS finished, IFNULL(MAX(score), 0) as score
+                                            FROM testsresults JOIN users u on u.id = testsresults.userId JOIN usersinfo u2 on u.id = u2.userId JOIN usersstudentsgroups u3 on testsresults.userId = u3.userId and studentgroupId = :groupId
+                                            WHERE testId = :testId and needsReview = 0
+                                            GROUP BY testsresults.userId, testId;");
+        $GetTestResults->bindParam(':groupId', $_groupId);
+        $_groupId = $groupId;
+    }
+
+    $GetTestResults->bindParam(':testId', $_testId);
+
+    $_testId = $testId;
+
+    if ($GetTestResults->execute()) {
+        if ($GetTestResults->rowCount() > 0) {
+            $returnArray = $GetTestResults->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
+
+    return $returnArray;
+}
 ?>

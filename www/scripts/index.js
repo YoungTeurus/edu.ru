@@ -139,7 +139,6 @@ function showTestInfo(testRowObject) {
                                 )
                                 .on('click', e => {
                                     e.preventDefault();
-                                    // TODO: код начала теста
                                     // Показываем спиннер:
                                     spinner[0].classList.remove('hidden');
                                     startNewTry(testRowObject["testId"])
@@ -309,6 +308,7 @@ function reactOnUserInfo() {
         // Елси пользователь может проверять тесты
         // Показываем соответствующую кнопку:
         $("#checkTests").parent().removeClass('hidden');
+        $("#getResults").parent().removeClass('hidden');
     }
 
     // TODO: Выводить имя пользователя куда-нибудь
@@ -458,7 +458,6 @@ function appendTestToEditTestsTable(editTestRowObject) {
                                         $("<button class=\"btn btn-primary\">")
                                             .on('click', () => {
                                                 console.log('Edit whole testId: ', editTestRowObject["id"]);
-                                                // TODO: Код для кнопки редактирования теста
                                                 hideAllPlaceholdersExceptOne("editTestPlaceholder");
                                                 setupEditTestPlaceholder(editTestRowObject["id"], editTestRowObject["name"], editTestRowObject["openDatetime"], editTestRowObject["closeDatetime"], editTestRowObject["maxTries"], editTestRowObject["locked"]);
                                             })
@@ -473,7 +472,6 @@ function appendTestToEditTestsTable(editTestRowObject) {
     function editQuestionsOfTest(editTestRowObject) {
         hideAllPlaceholdersExceptOne("editQuestionsPlaceholder");
         console.log('Edit questions testId: ', editTestRowObject["id"]);
-        // TODO: Код для кнопки редактирования вопросов
         // Подготваливаем placeHolder
         setupEditQuestionsPlaceholder(editTestRowObject["id"], editTestRowObject["name"]);
         getTestQuestionsForEdit(editTestRowObject["id"]).then(msg => {
@@ -576,16 +574,18 @@ function setupEditTestPlaceholder(testId, testName, openDate, closeDate, triesCo
         }
         hideAllPlaceholders();
     });
-    $("#deleteTest").off('click').on('click', e => {
-        e.preventDefault();
-        // TODO: удаление теста
-        reloadTestEditTable();
-        hideAllPlaceholders();
-    });
+    // TODO: удаление теста
+    // $("#deleteTest").off('click').on('click', e => {
+    //     e.preventDefault();
+    //     reloadTestEditTable();
+    //     hideAllPlaceholders();
+    // });
 }
 
 // Перезагружает список тестов для редактирования
 function reloadTestEditTable(){
+    hideElement($('#editTests .spinner'));
+    setDisabledInput($('#editTests'), false);
     // Очищаем список тестов
     hideElementBySelector("#editTestsTableContainer");
     clearEditTestsTable();
@@ -1252,31 +1252,16 @@ $(() => {
             )
             .catch(e => console.log(e));
     });
-    $('#editTests').on('click', e => {
-        e.preventDefault();
+    $('#editTests').on('click', function () {
+        const editTestsButton = $(this);
+        const editTestsButtonLoader = $(this).find(".spinner");
+
+        unhideElement(editTestsButtonLoader);
+        setDisabledInput(editTestsButton, true);
+
+        hideAllTestControlsPlaceholders();
         unhideElementBySelector("#editTestsPlaceholder");
         reloadTestEditTable();
-        // // Очищаем список тестов
-        // clearEditTestsTable();
-        // getAllTests().then(
-        //     // Заполняем список тестов
-        //     getAllTestsHandler
-        // ).catch(e => console.log(e));
-
-        // function getAllTestsHandler(msg) {
-        //     console.log(msg);
-        //     if (msg["success"]) {
-        //         if (!msg["error"]) {
-        //             msg["tests"].forEach(
-        //                 test => appendTestToEditTestsTable(test)
-        //             );
-        //             $("#createNewTest").off('click').on('click', () => {
-        //                 hideAllPlaceholdersExceptOne("editTestPlaceholder");
-        //                 setupEditTestPlaceholder(null, "Новый тест", null, null, 1, false, true);
-        //             })
-        //         }
-        //     }
-        // }
     });
     $('#checkTests').on('click', e => {
         e.preventDefault();

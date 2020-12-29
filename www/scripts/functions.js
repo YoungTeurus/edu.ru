@@ -29,6 +29,19 @@ const scoreRanges = {
     100: "⚜",
 }
 
+// Скрывает все контролы тестов
+function hideAllTestControlsPlaceholders(){
+    testControlsPlaceholders.forEach(
+        tCP => hideElementBySelector("#" + tCP)
+    );
+}
+
+const testControlsPlaceholders = [
+    "editTestsPlaceholder",
+    "checkTestsPlaceholder",
+    "getTestsResultsPlaceholder"
+]
+
 function ConnectException(message) {
     this.message = message;
     this.name = "Проблема с подключением";
